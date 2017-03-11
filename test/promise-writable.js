@@ -228,7 +228,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promiseWritable.onceEnd()
+      this.promiseWritable.onceFinish()
     })
 
     When('finish event is emitted', () => {
@@ -344,7 +344,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promise = this.promiseWritable.onceEnd()
+      this.promise = this.promiseWritable.onceFinish()
     })
 
     When('finish event is emitted', () => {
@@ -366,7 +366,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promiseWritable.onceEnd()
+      this.promiseWritable.onceFinish()
     })
 
     When('finish event is emitted', () => {
@@ -374,7 +374,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promise = this.promiseWritable.onceEnd()
+      this.promise = this.promiseWritable.onceFinish()
     })
 
     When('finish event is emitted', () => {
@@ -396,7 +396,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promise = this.promiseWritable.onceEnd()
+      this.promise = this.promiseWritable.onceFinish()
     })
 
     When('error event is emitted', () => {
