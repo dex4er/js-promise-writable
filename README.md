@@ -62,7 +62,7 @@ is 16 KiB.
 const content = await promiseWstream.writeAll(new Buffer('foobarbaz'), 3)
 ```
 
-#### open
+#### onceOpen
 
 This method returns `Promise` which is fulfilled when stream is opened. File
 descriptor is returned. It works only for
@@ -70,11 +70,11 @@ descriptor is returned. It works only for
 streams. It returns `null` if stream was already ended.
 
 ```js
-const fd = await promiseWstream.open()
+const fd = await promiseWstream.onceOpen()
 process.stdin(promiseWstream.stream)
 ```
 
-#### close
+#### onceClose
 
 This method returns `Promise` which is fulfilled when stream is closed.
 `undefined` value is returned. It works only for
@@ -85,38 +85,38 @@ streams. It returns `null` if stream was already ended.
 await promiseWstream.close()
 ```
 
-#### pipe
+#### oncePipe
 
 This method returns `Promise` which is fulfilled when `pipe` method is called on
 a readable stream, adding this writable to its set of destinations. It returns
 source stream that is piping to this writable.
 
 ```js
-const promise = promiseWstream.pipe()
+const promise = promiseWstream.oncePipe()
 process.stdin.pipe(promiseWstream.stream)
 const rstream = await promise
 ```
 
-#### unpipe
+#### onceUnpipe
 
 This method returns `Promise` which is fulfilled when `unpipe` method is called
 on a readable stream, removing this writable from its set of destinations. It
 returns source stream that is unpiping this writable.
 
 ```js
-const promise = promiseWstream.pipe()
+const promise = promiseWstream.oncePipe()
 process.stdin.pipe(promiseWstream.stream)
 process.stdin.unpipe(promiseWstream.stream)
 const rstream = await promise
 ```
 
-#### end
+#### onceFinish
 
 This method returns `Promise` which is fulfilled when stream is ended. No value
 is returned.
 
 ```js
-await promiseWstream.end()
+await promiseWstream.onceFinish()
 ```
 
 ### Promise

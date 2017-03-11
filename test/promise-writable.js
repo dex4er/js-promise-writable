@@ -228,7 +228,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promiseWritable.end()
+      this.promiseWritable.onceEnd()
     })
 
     When('finish event is emitted', () => {
@@ -277,7 +277,7 @@ Feature('Test promise-writable module', () => {
       })
 
       When(`I call ${event} method`, () => {
-        this.promise = this.promiseWritable[event]()
+        this.promise = this.promiseWritable['once' + capitalize(event)]()
       })
 
       When(`${event} event is emitted`, () => {
@@ -299,7 +299,7 @@ Feature('Test promise-writable module', () => {
       })
 
       When(`I call ${event} method`, () => {
-        this.promise = this.promiseWritable[event]()
+        this.promise = this.promiseWritable['once' + capitalize(event)]()
       })
 
       When('finish event is emitted', () => {
@@ -321,7 +321,7 @@ Feature('Test promise-writable module', () => {
       })
 
       When(`I call ${event} method`, () => {
-        this.promise = this.promiseWritable[event]()
+        this.promise = this.promiseWritable['once' + capitalize(event)]()
       })
 
       When('error event is emitted', () => {
@@ -344,7 +344,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promise = this.promiseWritable.end()
+      this.promise = this.promiseWritable.onceEnd()
     })
 
     When('finish event is emitted', () => {
@@ -366,7 +366,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promiseWritable.end()
+      this.promiseWritable.onceEnd()
     })
 
     When('finish event is emitted', () => {
@@ -374,7 +374,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promise = this.promiseWritable.end()
+      this.promise = this.promiseWritable.onceEnd()
     })
 
     When('finish event is emitted', () => {
@@ -396,7 +396,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promise = this.promiseWritable.end()
+      this.promise = this.promiseWritable.onceEnd()
     })
 
     When('error event is emitted', () => {
@@ -408,3 +408,7 @@ Feature('Test promise-writable module', () => {
     })
   })
 })
+
+function capitalize (string) {
+  return string[0].toUpperCase() + string.slice(1)
+}
