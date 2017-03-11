@@ -23,9 +23,7 @@ Feature('Test promise-writable module', () => {
       this._buffer = Buffer.concat([this._buffer, chunk])
       return !chunk.toString().startsWith('pause')
     }
-    end () {
-      this.emit('finish')
-    }
+    end () { }
   }
 
   Scenario('Write chunks to stream which doesn not pause', function () {
@@ -114,7 +112,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call write method', () => {
-      this.promise = this.promiseWritable.write(new Buffer('chunk1'))
+      this.promiseWritable.write(new Buffer('pause1'))
     })
 
     When('finish event is emitted', () => {
@@ -122,11 +120,15 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call write method again', () => {
-      this.promise = this.promiseWritable.write(new Buffer('chunk2'))
+      this.promise = this.promiseWritable.write(new Buffer('pause2'))
     })
 
-    Then('promise is fulfilled', () => {
-      return this.promise.should.be.fulfilled.and.ok
+    When('error event is emitted', () => {
+      this.stream.emit('error', new Error('write after end'))
+    })
+
+    Then('promise is rejected', () => {
+      return this.promise.should.be.rejectedWith(Error, 'write after end')
     })
   })
 
@@ -165,6 +167,10 @@ Feature('Test promise-writable module', () => {
       this.promise = this.promiseWritable.writeAll(new Buffer('chunk1chunk2chunk3'))
     })
 
+    When('finish event is emitted', () => {
+      this.stream.emit('finish')
+    })
+
     Then('promise is fulfilled', () => {
       return this.promise.should.be.fulfilled.and.ok
     })
@@ -185,6 +191,10 @@ Feature('Test promise-writable module', () => {
 
     When('I call writeAll method', () => {
       this.promise = this.promiseWritable.writeAll(new Buffer('chunk1chunk2chunk3'), 6)
+    })
+
+    When('finish event is emitted', () => {
+      this.stream.emit('finish')
     })
 
     Then('promise is fulfilled', () => {
@@ -209,6 +219,16 @@ Feature('Test promise-writable module', () => {
       this.promise = this.promiseWritable.writeAll(new Buffer('pause1pause2pause3'), 6)
     })
 
+    for (let i = 1; i <= 3; i++) {
+      When('drain event is emitted', () => {
+        this.stream.emit('drain')
+      })
+    }
+
+    When('finish event is emitted', () => {
+      this.stream.emit('finish')
+    })
+
     Then('promise is fulfilled', () => {
       return this.promise.should.be.fulfilled.and.ok
     })
@@ -228,7 +248,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promiseWritable.onceFinish()
+      this.promiseWritable.end()
     })
 
     When('finish event is emitted', () => {
@@ -239,8 +259,8 @@ Feature('Test promise-writable module', () => {
       this.promise = this.promiseWritable.writeAll(new Buffer('chunk1chunk2chunk3'))
     })
 
-    Then('promise is fulfilled', () => {
-      return this.promise.should.be.fulfilled.and.ok
+    Then('promise is rejected', () => {
+      return this.promise.should.be.rejectedWith(Error, 'writeAll after end')
     })
   })
 
@@ -306,8 +326,16 @@ Feature('Test promise-writable module', () => {
         this.stream.emit('finish')
       })
 
-      Then('promise returns null value', () => {
-        return this.promise.should.be.fulfilled.and.ok
+      Then('promise is rejected', () => {
+        return this.promise.should.be.rejectedWith(Error, `once ${event} after end`)
+      })
+
+      When(`I call ${event} method`, () => {
+        this.promise = this.promiseWritable['once' + capitalize(event)]()
+      })
+
+      Then('promise is rejected', () => {
+        return this.promise.should.be.rejectedWith(Error, `once ${event} after end`)
       })
     })
 
@@ -344,7 +372,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promise = this.promiseWritable.onceFinish()
+      this.promise = this.promiseWritable.end()
     })
 
     When('finish event is emitted', () => {
@@ -366,7 +394,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promiseWritable.onceFinish()
+      this.promiseWritable.end()
     })
 
     When('finish event is emitted', () => {
@@ -374,11 +402,19 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promise = this.promiseWritable.onceFinish()
+      this.promise = this.promiseWritable.end()
     })
 
     When('finish event is emitted', () => {
       this.stream.emit('finish')
+    })
+
+    Then('promise is fulfilled', () => {
+      return this.promise.should.be.fulfilled.and.ok
+    })
+
+    When('I call end method', () => {
+      this.promise = this.promiseWritable.end()
     })
 
     Then('promise is fulfilled', () => {
@@ -396,7 +432,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call end method', () => {
-      this.promise = this.promiseWritable.onceFinish()
+      this.promise = this.promiseWritable.end()
     })
 
     When('error event is emitted', () => {

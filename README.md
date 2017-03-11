@@ -31,7 +31,8 @@ npm install promise-writable
 ```js
 const PromiseWritable = require('promise-writable')
 
-const wstream = require('fs').createWriteStream('/tmp/test.txt')
+const fs = require('fs')
+const wstream = fs.createWriteStream('/tmp/test.txt')
 
 const promiseWstream = new PromiseWritable(wstream)
 ```
@@ -110,13 +111,13 @@ process.stdin.unpipe(promiseWstream.stream)
 const rstream = await promise
 ```
 
-#### onceFinish
+#### end
 
-This method returns `Promise` which is fulfilled when stream is ended. No value
-is returned.
+This method ends the stream nad returns `Promise` which is fulfilled when stream
+is ended. No value is returned.
 
 ```js
-await promiseWstream.onceFinish()
+await promiseWstream.end()
 ```
 
 ### Promise
