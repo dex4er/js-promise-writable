@@ -256,7 +256,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call writeAll method', () => {
-      this.promise = this.promiseWritable.writeAll(new Buffer('chunk1chunk2chunk3'))
+      this.promise = this.promiseWritable.writeAll(new Buffer('pause1pause2pause3'))
     })
 
     Then('promise is rejected', () => {
@@ -264,7 +264,7 @@ Feature('Test promise-writable module', () => {
     })
   })
 
-  Scenario('Write chunk to stream with error', function () {
+  Scenario('Write all to stream with error', function () {
     Given('Writable object', () => {
       this.stream = new MockStream()
     })
@@ -274,7 +274,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call writeAll method which pauses stream', () => {
-      this.promise = this.promiseWritable.write(new Buffer('pause1pause2pause3'))
+      this.promise = this.promiseWritable.writeAll(new Buffer('pause1pause2pause3'))
     })
 
     When('error event is emitted', () => {
