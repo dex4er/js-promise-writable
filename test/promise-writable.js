@@ -362,7 +362,7 @@ Feature('Test promise-writable module', () => {
     })
   }
 
-  Scenario('Wait for end from stream', function () {
+  Scenario('End the stream', function () {
     Given('Writable object', () => {
       this.stream = new MockStream()
     })
@@ -384,7 +384,7 @@ Feature('Test promise-writable module', () => {
     })
   })
 
-  Scenario('Wait for end from ended stream', function () {
+  Scenario('End the ended stream', function () {
     Given('Writable object', () => {
       this.stream = new MockStream()
     })
@@ -422,7 +422,7 @@ Feature('Test promise-writable module', () => {
     })
   })
 
-  Scenario('Wait for end from stream with error', function () {
+  Scenario('End the stream with error', function () {
     Given('Writable object', () => {
       this.stream = new MockStream()
     })
