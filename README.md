@@ -55,7 +55,7 @@ occured) or stream is ended (`finish` event).
 const chunk = await promiseWstream.write(new Buffer('foo'))
 ```
 
-#### writeAll(data)
+#### writeAll(data, [chunkSize])
 
 This method returns `Promise` which is fulfilled when stream accepted a
 content. This method writes the content chunk by chunk. The default chunk size
