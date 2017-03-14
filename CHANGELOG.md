@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.2 2017-03-14
+
+  * Default chunk size for writeAll is now 64KiB.
+
 ## v0.1.1 2017-03-14
 
   * `once('error')` is the same as `once('finish')`.
