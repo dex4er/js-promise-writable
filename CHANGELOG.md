@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.1 2017-03-14
+
+  * `once('error')` is the same as `once('finish')`.
+
 ## v0.1.0 2017-03-14
 
   * New method `once` replaces other `once*` methods.

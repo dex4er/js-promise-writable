@@ -296,7 +296,7 @@ Feature('Test promise-writable module', () => {
         this.promiseWritable = new PromiseWritable(this.stream)
       })
 
-      When(`I call ${event} method`, () => {
+      When(`I call once('${event}') method`, () => {
         this.promise = this.promiseWritable.once(event)
       })
 
@@ -324,7 +324,7 @@ Feature('Test promise-writable module', () => {
         this.promiseWritable = new PromiseWritable(this.stream)
       })
 
-      When(`I call ${event} method`, () => {
+      When(`I call once('${event}') method`, () => {
         this.promise = this.promiseWritable.once(event)
       })
 
@@ -360,7 +360,7 @@ Feature('Test promise-writable module', () => {
         this.promiseWritable = new PromiseWritable(this.stream)
       })
 
-      When(`I call ${event} method`, () => {
+      When(`I call once('${event}') method`, () => {
         this.promise = this.promiseWritable.once(event)
       })
 
@@ -373,6 +373,50 @@ Feature('Test promise-writable module', () => {
       })
     })
   }
+
+  Scenario('Wait for error from stream without error', function () {
+    Given('Writable object', () => {
+      this.stream = new MockStream()
+    })
+
+    Given('PromiseWritable object', () => {
+      this.promiseWritable = new PromiseWritable(this.stream)
+    })
+
+    When("I call once('error') method", () => {
+      this.promise = this.promiseWritable.once('error')
+    })
+
+    When('finish event is emitted', () => {
+      this.stream.emit('finish')
+    })
+
+    Then('promise returns null', () => {
+      return this.promise.should.eventually.be.null
+    })
+  })
+
+  Scenario('Wait for error from stream with error', function () {
+    Given('Writable object', () => {
+      this.stream = new MockStream()
+    })
+
+    Given('PromiseWritable object', () => {
+      this.promiseWritable = new PromiseWritable(this.stream)
+    })
+
+    When("I call once('error') method", () => {
+      this.promise = this.promiseWritable.once('error')
+    })
+
+    When('error event is emitted', () => {
+      this.stream.emit('error', new Error('boom'))
+    })
+
+    Then('promise is rejected', () => {
+      return this.promise.should.be.rejectedWith(Error, 'boom')
+    })
+  })
 
   Scenario('End the stream', function () {
     Given('Writable object', () => {
