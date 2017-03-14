@@ -26,6 +26,8 @@ npm install promise-writable
 
 ### Usage
 
+#### constructor(stream)
+
 `PromiseWritable` object requires `Writable` object to work:
 
 ```js
@@ -43,7 +45,7 @@ Original stream is available with `stream` property:
 console.log(promiseWstream.stream.flags)
 ```
 
-#### write
+#### write(chunk)
 
 This method returns `Promise` which is fulfilled when stream accepted a
 chunk (`write` method returned that stream is still writable or `drain` event
@@ -53,7 +55,7 @@ occured) or stream is ended (`finish` event).
 const chunk = await promiseWstream.write(new Buffer('foo'))
 ```
 
-#### writeAll
+#### writeAll(data)
 
 This method returns `Promise` which is fulfilled when stream accepted a
 content. This method writes the content chunk by chunk. The default chunk size
@@ -63,58 +65,30 @@ is 16 KiB.
 const content = await promiseWstream.writeAll(new Buffer('foobarbaz'), 3)
 ```
 
-#### onceOpen
+#### once(event)
 
-This method returns `Promise` which is fulfilled when stream is opened. File
-descriptor is returned. It works only for
-[`fd.WriteStream`](https://nodejs.org/api/fs.html#fs_class_fs_writestream)
-streams. It returns `null` if stream was already ended.
+This method returns `Promise` which is fulfilled when stream emits `event`. The
+result of this event is returned or `null` value if stream is already finished.
 
 ```js
-const fd = await promiseWstream.onceOpen()
+const fd = await promiseWstream.once('open')
 process.stdin(promiseWstream.stream)
-```
 
-#### onceClose
+await promiseWstream.once('close')
 
-This method returns `Promise` which is fulfilled when stream is closed.
-`undefined` value is returned. It works only for
-[`fd.WriteStream`](https://nodejs.org/api/fs.html#fs_class_fs_writestream)
-streams. It returns `null` if stream was already ended.
-
-```js
-await promiseWstream.close()
-```
-
-#### oncePipe
-
-This method returns `Promise` which is fulfilled when `pipe` method is called on
-a readable stream, adding this writable to its set of destinations. It returns
-source stream that is piping to this writable.
-
-```js
-const promise = promiseWstream.oncePipe()
+const promise = promiseWstream.once('pipe')
 process.stdin.pipe(promiseWstream.stream)
-const rstream = await promise
-```
+const src = await promise
 
-#### onceUnpipe
-
-This method returns `Promise` which is fulfilled when `unpipe` method is called
-on a readable stream, removing this writable from its set of destinations. It
-returns source stream that is unpiping this writable.
-
-```js
-const promise = promiseWstream.oncePipe()
-process.stdin.pipe(promiseWstream.stream)
+const promise = promiseWstream.once('unpipe')
 process.stdin.unpipe(promiseWstream.stream)
-const rstream = await promise
+const src = await promise
 ```
 
-#### end
+#### end()
 
-This method ends the stream nad returns `Promise` which is fulfilled when stream
-is ended. No value is returned.
+This method ends the stream and returns `Promise` which is fulfilled when stream
+is finished. No value is returned.
 
 ```js
 await promiseWstream.end()

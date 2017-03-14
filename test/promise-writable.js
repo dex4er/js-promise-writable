@@ -286,7 +286,7 @@ Feature('Test promise-writable module', () => {
     })
   })
 
-  for (const event of ['open', 'close', 'pipe', 'unpipe']) {
+  for (const event of ['open', 'close', 'pipe', 'unpipe', 'finish']) {
     Scenario(`Wait for ${event} from stream`, function () {
       Given('Writable object', () => {
         this.stream = new MockStream()
@@ -297,16 +297,22 @@ Feature('Test promise-writable module', () => {
       })
 
       When(`I call ${event} method`, () => {
-        this.promise = this.promiseWritable['once' + capitalize(event)]()
+        this.promise = this.promiseWritable.once(event)
       })
 
       When(`${event} event is emitted`, () => {
         this.stream.emit(event, 'result')
       })
 
-      Then('promise is fulfilled', () => {
-        return this.promise.should.eventually.equal('result')
-      })
+      if (event !== 'finish') {
+        Then('promise is fulfilled', () => {
+          return this.promise.should.eventually.equal('result')
+        })
+      } else {
+        Then('promise returns null', () => {
+          return this.promise.should.eventually.be.null
+        })
+      }
     })
 
     Scenario(`Wait for ${event} from finished stream`, function () {
@@ -319,24 +325,30 @@ Feature('Test promise-writable module', () => {
       })
 
       When(`I call ${event} method`, () => {
-        this.promise = this.promiseWritable['once' + capitalize(event)]()
+        this.promise = this.promiseWritable.once(event)
       })
 
       When('finish event is emitted', () => {
         this.stream.emit('finish')
       })
 
-      Then('promise is rejected', () => {
-        return this.promise.should.be.rejectedWith(Error, `once ${event} after end`)
+      Then('promise returns null', () => {
+        return this.promise.should.eventually.be.null
       })
 
       When(`I call ${event} method`, () => {
-        this.promise = this.promiseWritable['once' + capitalize(event)]()
+        this.promise = this.promiseWritable.once(event)
       })
 
-      Then('promise is rejected', () => {
-        return this.promise.should.be.rejectedWith(Error, `once ${event} after end`)
-      })
+      if (event !== 'finish') {
+        Then('promise is rejected', () => {
+          return this.promise.should.be.rejectedWith(Error, `once ${event} after end`)
+        })
+      } else {
+        Then('promise is fulfilled', () => {
+          return this.promise.should.eventually.be.null
+        })
+      }
     })
 
     Scenario(`Wait for ${event} from stream with error`, function () {
@@ -349,7 +361,7 @@ Feature('Test promise-writable module', () => {
       })
 
       When(`I call ${event} method`, () => {
-        this.promise = this.promiseWritable['once' + capitalize(event)]()
+        this.promise = this.promiseWritable.once(event)
       })
 
       When('error event is emitted', () => {
@@ -444,7 +456,3 @@ Feature('Test promise-writable module', () => {
     })
   })
 })
-
-function capitalize (string) {
-  return string[0].toUpperCase() + string.slice(1)
-}

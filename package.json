@@ -1,6 +1,6 @@
 {
   "name": "promise-writable",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Return promise for writable stream",
   "main": "lib/promise-writable.js",
   "repository": {
