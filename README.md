@@ -26,73 +26,105 @@ npm install promise-writable
 
 ### Usage
 
-#### constructor(stream)
+#### constructor
 
-`PromiseWritable` object requires `Writable` object to work:
+```js
+const promiseWritable = new PromiseWritable(stream)
+```
+
+`PromiseWritable` object requires `Writable` object to work.
+
+_Example:_
 
 ```js
 const PromiseWritable = require('promise-writable')
 
 const fs = require('fs')
-const wstream = fs.createWriteStream('/tmp/test.txt')
+const stream = fs.createWriteStream('/tmp/test.txt')
 
-const promiseWstream = new PromiseWritable(wstream)
+const promiseWritable = new PromiseWritable(stream)
 ```
 
-Original stream is available with `stream` property:
+#### stream
 
 ```js
-console.log(promiseWstream.stream.flags)
+const stream = promiseWritable.stream
 ```
 
-#### write(chunk)
+Original stream object.
+
+_Example:_
+
+```js
+console.log(promiseWritable.stream.flags)
+```
+
+#### write
+
+```js
+await promiseWritable.write(chunk)
+```
 
 This method returns `Promise` which is fulfilled when stream accepted a
 chunk (`write` method returned that stream is still writable or `drain` event
 occured) or stream is ended (`finish` event).
 
+_Example:_
+
 ```js
-const chunk = await promiseWstream.write(new Buffer('foo'))
+await promiseWritable.write(new Buffer('foo'))
 ```
 
-#### writeAll(data, [chunkSize])
+#### writeAll
+
+```js
+await promiseWritable.writeAll(content, chunkSize)
+```
 
 This method returns `Promise` which is fulfilled when stream accepted a
 content. This method writes the content chunk by chunk. The default chunk size
-is 16 KiB.
+is 64 KiB.
+
+_Example:_
 
 ```js
-const content = await promiseWstream.writeAll(new Buffer('foobarbaz'), 3)
+await promiseWritable.writeAll(new Buffer('foobarbaz'), 3)
 ```
 
-#### once(event)
+#### once
+
+```js
+const result = await promiseWritable.once(event)
+```
 
 This method returns `Promise` which is fulfilled when stream emits `event`. The
 result of this event is returned or `null` value if stream is already finished.
 
+_Example:_
+
 ```js
-const fd = await promiseWstream.once('open')
-process.stdin(promiseWstream.stream)
+const fd = await promiseWritable.once('open')
+process.stdin(promiseWritable.stream)
 
-await promiseWstream.once('close')
+await promiseWritable.once('close')
 
-const promise = promiseWstream.once('pipe')
-process.stdin.pipe(promiseWstream.stream)
+const promise = promiseWritable.once('pipe')
+process.stdin.pipe(promiseWritable.stream)
 const src = await promise
 
-const promise = promiseWstream.once('unpipe')
-process.stdin.unpipe(promiseWstream.stream)
+const promise = promiseWritable.once('unpipe')
+process.stdin.unpipe(promiseWritable.stream)
 const src = await promise
 ```
 
-#### end()
+#### end
+
+```js
+await promiseWritable.end()
+```
 
 This method ends the stream and returns `Promise` which is fulfilled when stream
 is finished. No value is returned.
-
-```js
-await promiseWstream.end()
-```
 
 ### Promise
 
