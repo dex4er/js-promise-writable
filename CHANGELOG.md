@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.3 2017-03-16
+
+  * Minor tweaks for documentation.
+
 ## v0.1.2 2017-03-14
 
   * Default chunk size for writeAll is now 64KiB.
