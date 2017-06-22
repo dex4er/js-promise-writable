@@ -8,7 +8,7 @@ async function main () {
   const size = Number(process.argv[3] || 1000)
   const chunkSize = Number(process.argv[4] || 64 * 1024)
 
-  const content = new Buffer(size)
+  const content = Buffer.alloc(size)
 
   await wstream.writeAll(content, chunkSize)
   console.log(`Write ${size} bytes in total`)

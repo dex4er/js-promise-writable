@@ -16,7 +16,7 @@ Feature('Test promise-writable module', () => {
     constructor () {
       super()
       this.writable = true
-      this._buffer = new Buffer(0)
+      this._buffer = Buffer.alloc(0)
     }
     write (chunk) {
       this._buffer = Buffer.concat([this._buffer, chunk])
@@ -35,7 +35,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call write method', () => {
-      this.promise = this.promiseWritable.write(new Buffer('chunk1'))
+      this.promise = this.promiseWritable.write(Buffer.from('chunk1'))
     })
 
     Then('promise is fulfilled', () => {
@@ -43,11 +43,11 @@ Feature('Test promise-writable module', () => {
     })
 
     Then('stream should contain this chunk', () => {
-      this.stream._buffer.should.deep.equal(new Buffer('chunk1'))
+      this.stream._buffer.should.deep.equal(Buffer.from('chunk1'))
     })
 
     When('I call write method again', () => {
-      this.promise = this.promiseWritable.write(new Buffer('chunk2'))
+      this.promise = this.promiseWritable.write(Buffer.from('chunk2'))
     })
 
     Then('promise is fulfilled', () => {
@@ -55,7 +55,7 @@ Feature('Test promise-writable module', () => {
     })
 
     Then('stream should contain another chunk', () => {
-      this.stream._buffer.should.deep.equal(new Buffer('chunk1chunk2'))
+      this.stream._buffer.should.deep.equal(Buffer.from('chunk1chunk2'))
     })
   })
 
@@ -69,7 +69,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call write method which pauses stream', () => {
-      this.promise = this.promiseWritable.write(new Buffer('pause1'))
+      this.promise = this.promiseWritable.write(Buffer.from('pause1'))
     })
 
     When('drain event is emitted', () => {
@@ -81,11 +81,11 @@ Feature('Test promise-writable module', () => {
     })
 
     Then('stream should contain this chunk', () => {
-      this.stream._buffer.should.deep.equal(new Buffer('pause1'))
+      this.stream._buffer.should.deep.equal(Buffer.from('pause1'))
     })
 
     When('I call write method again', () => {
-      this.promise = this.promiseWritable.write(new Buffer('pause2'))
+      this.promise = this.promiseWritable.write(Buffer.from('pause2'))
     })
 
     When('finish event is emitted', () => {
@@ -97,7 +97,7 @@ Feature('Test promise-writable module', () => {
     })
 
     Then('stream should contain another chunk', () => {
-      this.stream._buffer.should.deep.equal(new Buffer('pause1pause2'))
+      this.stream._buffer.should.deep.equal(Buffer.from('pause1pause2'))
     })
   })
 
@@ -111,7 +111,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call write method', () => {
-      this.promiseWritable.write(new Buffer('pause1'))
+      this.promiseWritable.write(Buffer.from('pause1'))
     })
 
     When('finish event is emitted', () => {
@@ -119,7 +119,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call write method again', () => {
-      this.promise = this.promiseWritable.write(new Buffer('pause2'))
+      this.promise = this.promiseWritable.write(Buffer.from('pause2'))
     })
 
     When('error event is emitted', () => {
@@ -141,7 +141,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call write method which pauses stream', () => {
-      this.promise = this.promiseWritable.write(new Buffer('pause1'))
+      this.promise = this.promiseWritable.write(Buffer.from('pause1'))
     })
 
     When('error event is emitted', () => {
@@ -163,7 +163,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call writeAll method', () => {
-      this.promise = this.promiseWritable.writeAll(new Buffer('chunk1chunk2chunk3'))
+      this.promise = this.promiseWritable.writeAll(Buffer.from('chunk1chunk2chunk3'))
     })
 
     When('finish event is emitted', () => {
@@ -175,7 +175,7 @@ Feature('Test promise-writable module', () => {
     })
 
     Then('stream should contain this chunk', () => {
-      this.stream._buffer.should.deep.equal(new Buffer('chunk1chunk2chunk3'))
+      this.stream._buffer.should.deep.equal(Buffer.from('chunk1chunk2chunk3'))
     })
   })
 
@@ -189,7 +189,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call writeAll method', () => {
-      this.promise = this.promiseWritable.writeAll(new Buffer('chunk1chunk2chunk3'), 6)
+      this.promise = this.promiseWritable.writeAll(Buffer.from('chunk1chunk2chunk3'), 6)
     })
 
     When('finish event is emitted', () => {
@@ -201,7 +201,7 @@ Feature('Test promise-writable module', () => {
     })
 
     Then('stream should contain this chunk', () => {
-      this.stream._buffer.should.deep.equal(new Buffer('chunk1chunk2chunk3'))
+      this.stream._buffer.should.deep.equal(Buffer.from('chunk1chunk2chunk3'))
     })
   })
 
@@ -215,7 +215,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call writeAll method which pauses stream', () => {
-      this.promise = this.promiseWritable.writeAll(new Buffer('pause1pause2pause3'), 6)
+      this.promise = this.promiseWritable.writeAll(Buffer.from('pause1pause2pause3'), 6)
     })
 
     for (let i = 1; i <= 3; i++) {
@@ -233,7 +233,7 @@ Feature('Test promise-writable module', () => {
     })
 
     Then('stream should contain this chunk', () => {
-      this.stream._buffer.should.deep.equal(new Buffer('pause1pause2pause3'))
+      this.stream._buffer.should.deep.equal(Buffer.from('pause1pause2pause3'))
     })
   })
 
@@ -255,7 +255,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call writeAll method', () => {
-      this.promise = this.promiseWritable.writeAll(new Buffer('pause1pause2pause3'))
+      this.promise = this.promiseWritable.writeAll(Buffer.from('pause1pause2pause3'))
     })
 
     Then('promise is rejected', () => {
@@ -273,7 +273,7 @@ Feature('Test promise-writable module', () => {
     })
 
     When('I call writeAll method which pauses stream', () => {
-      this.promise = this.promiseWritable.writeAll(new Buffer('pause1pause2pause3'))
+      this.promise = this.promiseWritable.writeAll(Buffer.from('pause1pause2pause3'))
     })
 
     When('error event is emitted', () => {
