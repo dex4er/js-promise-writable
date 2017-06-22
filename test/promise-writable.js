@@ -25,477 +25,545 @@ Feature('Test promise-writable module', () => {
     end () { }
   }
 
-  Scenario('Write chunks to stream which doesn not pause', function () {
+  Scenario('Write chunks to stream which doesn not pause', () => {
+    let promise
+    let promiseWritable
+    let stream
+
     Given('Writable object', () => {
-      this.stream = new MockStream()
+      stream = new MockStream()
     })
 
-    Given('PromiseWritable object', () => {
-      this.promiseWritable = new PromiseWritable(this.stream)
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
     })
 
     When('I call write method', () => {
-      this.promise = this.promiseWritable.write(Buffer.from('chunk1'))
+      promise = promiseWritable.write(Buffer.from('chunk1'))
     })
 
     Then('promise is fulfilled', () => {
-      return this.promise.should.be.fulfilled.and.ok
+      return promise.should.be.fulfilled.and.ok
     })
 
-    Then('stream should contain this chunk', () => {
-      this.stream._buffer.should.deep.equal(Buffer.from('chunk1'))
+    And('stream should contain this chunk', () => {
+      stream._buffer.should.deep.equal(Buffer.from('chunk1'))
     })
 
     When('I call write method again', () => {
-      this.promise = this.promiseWritable.write(Buffer.from('chunk2'))
+      promise = promiseWritable.write(Buffer.from('chunk2'))
     })
 
     Then('promise is fulfilled', () => {
-      return this.promise.should.be.fulfilled.and.ok
+      return promise.should.be.fulfilled.and.ok
     })
 
-    Then('stream should contain another chunk', () => {
-      this.stream._buffer.should.deep.equal(Buffer.from('chunk1chunk2'))
+    And('stream should contain another chunk', () => {
+      stream._buffer.should.deep.equal(Buffer.from('chunk1chunk2'))
     })
   })
 
-  Scenario('Write chunks to stream which pauses', function () {
+  Scenario('Write chunks to stream which pauses', () => {
+    let promise
+    let promiseWritable
+    let stream
+
     Given('Writable object', () => {
-      this.stream = new MockStream()
+      stream = new MockStream()
     })
 
-    Given('PromiseWritable object', () => {
-      this.promiseWritable = new PromiseWritable(this.stream)
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
     })
 
     When('I call write method which pauses stream', () => {
-      this.promise = this.promiseWritable.write(Buffer.from('pause1'))
+      promise = promiseWritable.write(Buffer.from('pause1'))
     })
 
-    When('drain event is emitted', () => {
-      this.stream.emit('drain')
+    And('drain event is emitted', () => {
+      stream.emit('drain')
     })
 
     Then('promise is fulfilled', () => {
-      return this.promise.should.be.fulfilled.and.ok
+      return promise.should.be.fulfilled.and.ok
     })
 
-    Then('stream should contain this chunk', () => {
-      this.stream._buffer.should.deep.equal(Buffer.from('pause1'))
+    And('stream should contain this chunk', () => {
+      stream._buffer.should.deep.equal(Buffer.from('pause1'))
     })
 
     When('I call write method again', () => {
-      this.promise = this.promiseWritable.write(Buffer.from('pause2'))
+      promise = promiseWritable.write(Buffer.from('pause2'))
     })
 
-    When('finish event is emitted', () => {
-      this.stream.emit('finish')
+    And('finish event is emitted', () => {
+      stream.emit('finish')
     })
 
     Then('promise is fulfilled', () => {
-      return this.promise.should.be.fulfilled.and.ok
+      return promise.should.be.fulfilled.and.ok
     })
 
-    Then('stream should contain another chunk', () => {
-      this.stream._buffer.should.deep.equal(Buffer.from('pause1pause2'))
+    And('stream should contain another chunk', () => {
+      stream._buffer.should.deep.equal(Buffer.from('pause1pause2'))
     })
   })
 
-  Scenario('Write chunk to already finished stream', function () {
+  Scenario('Write chunk to already finished stream', () => {
+    let promise
+    let promiseWritable
+    let stream
+
     Given('Writable object', () => {
-      this.stream = new MockStream()
+      stream = new MockStream()
     })
 
-    Given('PromiseWritable object', () => {
-      this.promiseWritable = new PromiseWritable(this.stream)
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
     })
 
     When('I call write method', () => {
-      this.promiseWritable.write(Buffer.from('pause1'))
+      promiseWritable.write(Buffer.from('pause1'))
     })
 
-    When('finish event is emitted', () => {
-      this.stream.emit('finish')
+    And('finish event is emitted', () => {
+      stream.emit('finish')
     })
 
-    When('I call write method again', () => {
-      this.promise = this.promiseWritable.write(Buffer.from('pause2'))
+    And('I call write method again', () => {
+      promise = promiseWritable.write(Buffer.from('pause2'))
     })
 
-    When('error event is emitted', () => {
-      this.stream.emit('error', new Error('write after end'))
+    And('error event is emitted', () => {
+      stream.emit('error', new Error('write after end'))
     })
 
     Then('promise is rejected', () => {
-      return this.promise.should.be.rejectedWith(Error, 'write after end')
+      return promise.should.be.rejectedWith(Error, 'write after end')
     })
   })
 
-  Scenario('Write chunk to stream with error', function () {
+  Scenario('Write chunk to stream with error', () => {
+    let promise
+    let promiseWritable
+    let stream
+
     Given('Writable object', () => {
-      this.stream = new MockStream()
+      stream = new MockStream()
     })
 
-    Given('PromiseWritable object', () => {
-      this.promiseWritable = new PromiseWritable(this.stream)
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
     })
 
     When('I call write method which pauses stream', () => {
-      this.promise = this.promiseWritable.write(Buffer.from('pause1'))
+      promise = promiseWritable.write(Buffer.from('pause1'))
     })
 
-    When('error event is emitted', () => {
-      this.stream.emit('error', new Error('boom'))
+    And('error event is emitted', () => {
+      stream.emit('error', new Error('boom'))
     })
 
     Then('promise is rejected', () => {
-      return this.promise.should.be.rejectedWith(Error, 'boom')
+      return promise.should.be.rejectedWith(Error, 'boom')
     })
   })
 
-  Scenario('Write all in one chunk', function () {
+  Scenario('Write all in one chunk', () => {
+    let promise
+    let promiseWritable
+    let stream
+
     Given('Writable object', () => {
-      this.stream = new MockStream()
+      stream = new MockStream()
     })
 
-    Given('PromiseWritable object', () => {
-      this.promiseWritable = new PromiseWritable(this.stream)
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
     })
 
     When('I call writeAll method', () => {
-      this.promise = this.promiseWritable.writeAll(Buffer.from('chunk1chunk2chunk3'))
+      promise = promiseWritable.writeAll(Buffer.from('chunk1chunk2chunk3'))
     })
 
-    When('finish event is emitted', () => {
-      this.stream.emit('finish')
+    And('finish event is emitted', () => {
+      stream.emit('finish')
     })
 
     Then('promise is fulfilled', () => {
-      return this.promise.should.be.fulfilled.and.ok
+      return promise.should.be.fulfilled.and.ok
     })
 
-    Then('stream should contain this chunk', () => {
-      this.stream._buffer.should.deep.equal(Buffer.from('chunk1chunk2chunk3'))
+    And('stream should contain this chunk', () => {
+      stream._buffer.should.deep.equal(Buffer.from('chunk1chunk2chunk3'))
     })
   })
 
-  Scenario('Write all chunk by chunk in non paused mode', function () {
+  Scenario('Write all chunk by chunk in non paused mode', () => {
+    let promise
+    let promiseWritable
+    let stream
+
     Given('Writable object', () => {
-      this.stream = new MockStream()
+      stream = new MockStream()
     })
 
-    Given('PromiseWritable object', () => {
-      this.promiseWritable = new PromiseWritable(this.stream)
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
     })
 
     When('I call writeAll method', () => {
-      this.promise = this.promiseWritable.writeAll(Buffer.from('chunk1chunk2chunk3'), 6)
+      promise = promiseWritable.writeAll(Buffer.from('chunk1chunk2chunk3'), 6)
     })
 
-    When('finish event is emitted', () => {
-      this.stream.emit('finish')
+    And('finish event is emitted', () => {
+      stream.emit('finish')
     })
 
     Then('promise is fulfilled', () => {
-      return this.promise.should.be.fulfilled.and.ok
+      return promise.should.be.fulfilled.and.ok
     })
 
-    Then('stream should contain this chunk', () => {
-      this.stream._buffer.should.deep.equal(Buffer.from('chunk1chunk2chunk3'))
+    And('stream should contain this chunk', () => {
+      stream._buffer.should.deep.equal(Buffer.from('chunk1chunk2chunk3'))
     })
   })
 
-  Scenario('Write all chunk by chunk in paused mode', function () {
+  Scenario('Write all chunk by chunk in paused mode', () => {
+    let promise
+    let promiseWritable
+    let stream
+
     Given('Writable object', () => {
-      this.stream = new MockStream()
+      stream = new MockStream()
     })
 
-    Given('PromiseWritable object', () => {
-      this.promiseWritable = new PromiseWritable(this.stream)
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
     })
 
     When('I call writeAll method which pauses stream', () => {
-      this.promise = this.promiseWritable.writeAll(Buffer.from('pause1pause2pause3'), 6)
+      promise = promiseWritable.writeAll(Buffer.from('pause1pause2pause3'), 6)
     })
 
     for (let i = 1; i <= 3; i++) {
-      When('drain event is emitted', () => {
-        this.stream.emit('drain')
+      And('drain event is emitted', () => {
+        stream.emit('drain')
       })
     }
 
-    When('finish event is emitted', () => {
-      this.stream.emit('finish')
+    And('finish event is emitted', () => {
+      stream.emit('finish')
     })
 
     Then('promise is fulfilled', () => {
-      return this.promise.should.be.fulfilled.and.ok
+      return promise.should.be.fulfilled.and.ok
     })
 
-    Then('stream should contain this chunk', () => {
-      this.stream._buffer.should.deep.equal(Buffer.from('pause1pause2pause3'))
+    And('stream should contain this chunk', () => {
+      stream._buffer.should.deep.equal(Buffer.from('pause1pause2pause3'))
     })
   })
 
-  Scenario('Write all to finished stream', function () {
+  Scenario('Write all to finished stream', () => {
+    let promise
+    let promiseWritable
+    let stream
+
     Given('Writable object', () => {
-      this.stream = new MockStream()
+      stream = new MockStream()
     })
 
-    Given('PromiseWritable object', () => {
-      this.promiseWritable = new PromiseWritable(this.stream)
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
     })
 
     When('I call end method', () => {
-      this.promiseWritable.end()
+      promiseWritable.end()
     })
 
     When('finish event is emitted', () => {
-      this.stream.emit('finish')
+      stream.emit('finish')
     })
 
-    When('I call writeAll method', () => {
-      this.promise = this.promiseWritable.writeAll(Buffer.from('pause1pause2pause3'))
+    And('I call writeAll method', () => {
+      promise = promiseWritable.writeAll(Buffer.from('pause1pause2pause3'))
     })
 
     Then('promise is rejected', () => {
-      return this.promise.should.be.rejectedWith(Error, 'writeAll after end')
+      return promise.should.be.rejectedWith(Error, 'writeAll after end')
     })
   })
 
-  Scenario('Write all to stream with error', function () {
+  Scenario('Write all to stream with error', () => {
+    let promise
+    let promiseWritable
+    let stream
+
     Given('Writable object', () => {
-      this.stream = new MockStream()
+      stream = new MockStream()
     })
 
-    Given('PromiseWritable object', () => {
-      this.promiseWritable = new PromiseWritable(this.stream)
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
     })
 
     When('I call writeAll method which pauses stream', () => {
-      this.promise = this.promiseWritable.writeAll(Buffer.from('pause1pause2pause3'))
+      promise = promiseWritable.writeAll(Buffer.from('pause1pause2pause3'))
     })
 
-    When('error event is emitted', () => {
-      this.stream.emit('error', new Error('boom'))
+    And('error event is emitted', () => {
+      stream.emit('error', new Error('boom'))
     })
 
     Then('promise is rejected', () => {
-      return this.promise.should.be.rejectedWith(Error, 'boom')
+      return promise.should.be.rejectedWith(Error, 'boom')
     })
   })
 
   for (const event of ['open', 'close', 'pipe', 'unpipe', 'finish']) {
-    Scenario(`Wait for ${event} from stream`, function () {
+    Scenario(`Wait for ${event} from stream`, () => {
+      let promise
+      let promiseWritable
+      let stream
+
       Given('Writable object', () => {
-        this.stream = new MockStream()
+        stream = new MockStream()
       })
 
-      Given('PromiseWritable object', () => {
-        this.promiseWritable = new PromiseWritable(this.stream)
+      And('PromiseWritable object', () => {
+        promiseWritable = new PromiseWritable(stream)
       })
 
       When(`I call once('${event}') method`, () => {
-        this.promise = this.promiseWritable.once(event)
+        promise = promiseWritable.once(event)
       })
 
-      When(`${event} event is emitted`, () => {
-        this.stream.emit(event, 'result')
+      And(`${event} event is emitted`, () => {
+        stream.emit(event, 'result')
       })
 
       if (event !== 'finish') {
         Then('promise is fulfilled', () => {
-          return this.promise.should.eventually.equal('result')
+          return promise.should.eventually.equal('result')
         })
       } else {
         Then('promise returns null', () => {
-          return this.promise.should.eventually.be.null
+          return promise.should.eventually.be.null
         })
       }
     })
 
-    Scenario(`Wait for ${event} from finished stream`, function () {
+    Scenario(`Wait for ${event} from finished stream`, () => {
+      let promise
+      let promiseWritable
+      let stream
+
       Given('Writable object', () => {
-        this.stream = new MockStream()
+        stream = new MockStream()
       })
 
-      Given('PromiseWritable object', () => {
-        this.promiseWritable = new PromiseWritable(this.stream)
+      And('PromiseWritable object', () => {
+        promiseWritable = new PromiseWritable(stream)
       })
 
       When(`I call once('${event}') method`, () => {
-        this.promise = this.promiseWritable.once(event)
+        promise = promiseWritable.once(event)
       })
 
-      When('finish event is emitted', () => {
-        this.stream.emit('finish')
+      And('finish event is emitted', () => {
+        stream.emit('finish')
       })
 
       Then('promise returns null', () => {
-        return this.promise.should.eventually.be.null
+        return promise.should.eventually.be.null
       })
 
       When(`I call ${event} method`, () => {
-        this.promise = this.promiseWritable.once(event)
+        promise = promiseWritable.once(event)
       })
 
       if (event !== 'finish') {
         Then('promise is rejected', () => {
-          return this.promise.should.be.rejectedWith(Error, `once ${event} after end`)
+          return promise.should.be.rejectedWith(Error, `once ${event} after end`)
         })
       } else {
         Then('promise is fulfilled', () => {
-          return this.promise.should.eventually.be.null
+          return promise.should.eventually.be.null
         })
       }
     })
 
-    Scenario(`Wait for ${event} from stream with error`, function () {
+    Scenario(`Wait for ${event} from stream with error`, () => {
+      let promise
+      let promiseWritable
+      let stream
+
       Given('Writable object', () => {
-        this.stream = new MockStream()
+        stream = new MockStream()
       })
 
-      Given('PromiseWritable object', () => {
-        this.promiseWritable = new PromiseWritable(this.stream)
+      And('PromiseWritable object', () => {
+        promiseWritable = new PromiseWritable(stream)
       })
 
       When(`I call once('${event}') method`, () => {
-        this.promise = this.promiseWritable.once(event)
+        promise = promiseWritable.once(event)
       })
 
-      When('error event is emitted', () => {
-        this.stream.emit('error', new Error('boom'))
+      And('error event is emitted', () => {
+        stream.emit('error', new Error('boom'))
       })
 
       Then('promise is rejected', () => {
-        return this.promise.should.be.rejectedWith(Error, 'boom')
+        return promise.should.be.rejectedWith(Error, 'boom')
       })
     })
   }
 
-  Scenario('Wait for error from stream without error', function () {
+  Scenario('Wait for error from stream without error', () => {
+    let promise
+    let promiseWritable
+    let stream
+
     Given('Writable object', () => {
-      this.stream = new MockStream()
+      stream = new MockStream()
     })
 
-    Given('PromiseWritable object', () => {
-      this.promiseWritable = new PromiseWritable(this.stream)
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
     })
 
     When("I call once('error') method", () => {
-      this.promise = this.promiseWritable.once('error')
+      promise = promiseWritable.once('error')
     })
 
-    When('finish event is emitted', () => {
-      this.stream.emit('finish')
+    And('finish event is emitted', () => {
+      stream.emit('finish')
     })
 
     Then('promise returns null', () => {
-      return this.promise.should.eventually.be.null
+      return promise.should.eventually.be.null
     })
   })
 
-  Scenario('Wait for error from stream with error', function () {
+  Scenario('Wait for error from stream with error', () => {
+    let promise
+    let promiseWritable
+    let stream
+
     Given('Writable object', () => {
-      this.stream = new MockStream()
+      stream = new MockStream()
     })
 
-    Given('PromiseWritable object', () => {
-      this.promiseWritable = new PromiseWritable(this.stream)
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
     })
 
     When("I call once('error') method", () => {
-      this.promise = this.promiseWritable.once('error')
+      promise = promiseWritable.once('error')
     })
 
-    When('error event is emitted', () => {
-      this.stream.emit('error', new Error('boom'))
-    })
-
-    Then('promise is rejected', () => {
-      return this.promise.should.be.rejectedWith(Error, 'boom')
-    })
-  })
-
-  Scenario('End the stream', function () {
-    Given('Writable object', () => {
-      this.stream = new MockStream()
-    })
-
-    Given('PromiseWritable object', () => {
-      this.promiseWritable = new PromiseWritable(this.stream)
-    })
-
-    When('I call end method', () => {
-      this.promise = this.promiseWritable.end()
-    })
-
-    When('finish event is emitted', () => {
-      this.stream.emit('finish')
-    })
-
-    Then('promise is fulfilled', () => {
-      return this.promise.should.be.fulfilled.and.ok
-    })
-  })
-
-  Scenario('End the ended stream', function () {
-    Given('Writable object', () => {
-      this.stream = new MockStream()
-    })
-
-    Given('PromiseWritable object', () => {
-      this.promiseWritable = new PromiseWritable(this.stream)
-    })
-
-    When('I call end method', () => {
-      this.promiseWritable.end()
-    })
-
-    When('finish event is emitted', () => {
-      this.stream.emit('finish')
-    })
-
-    When('I call end method', () => {
-      this.promise = this.promiseWritable.end()
-    })
-
-    When('finish event is emitted', () => {
-      this.stream.emit('finish')
-    })
-
-    Then('promise is fulfilled', () => {
-      return this.promise.should.be.fulfilled.and.ok
-    })
-
-    When('I call end method', () => {
-      this.promise = this.promiseWritable.end()
-    })
-
-    Then('promise is fulfilled', () => {
-      return this.promise.should.be.fulfilled.and.ok
-    })
-  })
-
-  Scenario('End the stream with error', function () {
-    Given('Writable object', () => {
-      this.stream = new MockStream()
-    })
-
-    Given('PromiseWritable object', () => {
-      this.promiseWritable = new PromiseWritable(this.stream)
-    })
-
-    When('I call end method', () => {
-      this.promise = this.promiseWritable.end()
-    })
-
-    When('error event is emitted', () => {
-      this.stream.emit('error', new Error('boom'))
+    And('error event is emitted', () => {
+      stream.emit('error', new Error('boom'))
     })
 
     Then('promise is rejected', () => {
-      return this.promise.should.be.rejectedWith(Error, 'boom')
+      return promise.should.be.rejectedWith(Error, 'boom')
+    })
+  })
+
+  Scenario('End the stream', () => {
+    let promise
+    let promiseWritable
+    let stream
+
+    Given('Writable object', () => {
+      stream = new MockStream()
+    })
+
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
+    })
+
+    When('I call end method', () => {
+      promise = promiseWritable.end()
+    })
+
+    And('finish event is emitted', () => {
+      stream.emit('finish')
+    })
+
+    Then('promise is fulfilled', () => {
+      return promise.should.be.fulfilled.and.ok
+    })
+  })
+
+  Scenario('End the ended stream', () => {
+    let promise
+    let promiseWritable
+    let stream
+
+    Given('Writable object', () => {
+      stream = new MockStream()
+    })
+
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
+    })
+
+    When('I call end method', () => {
+      promiseWritable.end()
+    })
+
+    And('finish event is emitted', () => {
+      stream.emit('finish')
+    })
+
+    And('I call end method', () => {
+      promise = promiseWritable.end()
+    })
+
+    And('finish event is emitted', () => {
+      stream.emit('finish')
+    })
+
+    Then('promise is fulfilled', () => {
+      return promise.should.be.fulfilled.and.ok
+    })
+
+    When('I call end method', () => {
+      promise = promiseWritable.end()
+    })
+
+    Then('promise is fulfilled', () => {
+      return promise.should.be.fulfilled.and.ok
+    })
+  })
+
+  Scenario('End the stream with error', () => {
+    let promise
+    let promiseWritable
+    let stream
+
+    Given('Writable object', () => {
+      stream = new MockStream()
+    })
+
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
+    })
+
+    When('I call end method', () => {
+      promise = promiseWritable.end()
+    })
+
+    And('error event is emitted', () => {
+      stream.emit('error', new Error('boom'))
+    })
+
+    Then('promise is rejected', () => {
+      return promise.should.be.rejectedWith(Error, 'boom')
     })
   })
 })
