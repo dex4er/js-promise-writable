@@ -1,23 +1,25 @@
 'use strict'
 
-const PromiseReadable = require('promise-readable')
-const PromiseWritable = require('../lib/promise-writable')
-const fs = require('fs')
+const { PromiseWritable } = require('../lib/promise-writable')
+const { createWriteStream } = require('fs')
 
 async function main () {
-  const rstream = new PromiseReadable(process.stdin)
-  const wstream = new PromiseWritable(fs.createWriteStream(process.argv[2] || 'a.out'))
+  const wstream = new PromiseWritable(createWriteStream(process.argv[2] || 'a.out'))
+  const size = Number(process.argv[3]) || 1000
+  const chunkSize = Number(process.argv[4]) || 64 * 1024
 
+  const content = Buffer.alloc(size)
+
+  let part = 0
   let total = 0
 
-  for (let chunk; (chunk = await rstream.read()) !== null;) {
-    console.log(`Read ${chunk.length} bytes chunk`)
-    await wstream.write(chunk)
-    console.log(`Write ${chunk.length} bytes chunk`)
-    total += chunk.length
+  while (part * chunkSize < content.length) {
+    const chunk = content.slice(part * chunkSize, ++part * chunkSize)
+    total += await wstream.write(chunk)
+    console.info(`Written ${chunk.length} bytes chunk`)
   }
 
-  console.log(`Write ${total} bytes in total`)
+  console.info(`Written ${total} bytes in total`)
 }
 
-main()
+main().catch(console.error)

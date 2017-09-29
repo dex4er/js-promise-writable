@@ -37,11 +37,20 @@ const promiseWritable = new PromiseWritable(stream)
 _Example:_
 
 ```js
-const PromiseWritable = require('promise-writable')
+const { PromiseWritable } = require('promise-writable')
+const { createWriteStream } = require('fs')
 
-const fs = require('fs')
-const stream = fs.createWriteStream('/tmp/test.txt')
+const stream = createWriteStream('/tmp/test.txt')
+const promiseWritable = new PromiseWritable(stream)
+```
 
+_Typescript:_
+
+```ts
+import { PromiseWritable } from 'promise-writable'
+import { createWriteStream } from 'fs'
+
+const stream = createWriteStream('/tmp/test.txt')
 const promiseWritable = new PromiseWritable(stream)
 ```
 
@@ -62,43 +71,48 @@ console.log(promiseWritable.stream.flags)
 #### write
 
 ```js
-await promiseWritable.write(chunk)
+const written = await promiseWritable.write(chunk)
 ```
 
 This method returns `Promise` which is fulfilled when stream accepted a
 chunk (`write` method returned that stream is still writable or `drain` event
 occured) or stream is ended (`finish` event).
 
+Promise resolves to number of written bytes.
+
 _Example:_
 
 ```js
-await promiseWritable.write(new Buffer('foo'))
+const written = await promiseWritable.write(new Buffer('foo'))
 ```
 
 #### writeAll
 
 ```js
-await promiseWritable.writeAll(content, chunkSize)
+const total = await promiseWritable.writeAll(content, chunkSize)
 ```
 
 This method returns `Promise` which is fulfilled when stream accepted a
 content. This method writes the content chunk by chunk. The default chunk size
 is 64 KiB.
 
+Promise resolves to number of written bytes.
+
 _Example:_
 
 ```js
-await promiseWritable.writeAll(new Buffer('foobarbaz'), 3)
+const total = await promiseWritable.writeAll(new Buffer('foobarbaz'), 3)
 ```
 
 #### once
 
 ```js
-const result = await promiseWritable.once(event)
+await promiseWritable.once(event)
 ```
 
 This method returns `Promise` which is fulfilled when stream emits `event`. The
-result of this event is returned or `null` value if stream is already finished.
+result of this event is returned or `undefined` value if stream is already
+finished.
 
 _Example:_
 

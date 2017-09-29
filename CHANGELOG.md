@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.0 2017-09-29
+
+  * Exports also as a class and namespace and the default.
+  * Typings for Typescript.
+  * Additional safe checks for detecting already closed stream.
+  * Promise for `write` or `writeAll` resolves to number of written bytes.
+
 ## v0.1.4 2017-06-22
 
   * Upgraded chai@4.0.2, chai-as-promised@7.0.0, snazzy@7.0.0,

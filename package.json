@@ -1,8 +1,9 @@
 {
   "name": "promise-writable",
-  "version": "0.1.4",
+  "version": "1.0.0",
   "description": "Return promise for writable stream",
   "main": "lib/promise-writable.js",
+  "typings": "lib/promise-writable.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/dex4er/js-promise-writable"
@@ -25,19 +26,22 @@
     "any-promise": "^1.3.0"
   },
   "devDependencies": {
-    "chai": "^4.0.2",
-    "chai-as-promised": "^7.0.0",
+    "@types/node": "^8.0.31",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "promise-readable": "file:///Users/dexter/src/js/promise-readable",
     "snazzy": "^7.0.0",
-    "standard": "^10.0.2",
-    "tap": "^10.5.1",
-    "tap-given": "^0.4.1"
+    "standard": "^10.0.3",
+    "tap": "^10.7.2",
+    "tap-given": "^0.5.0"
   },
   "scripts": {
-    "test": "standard --verbose | snazzy && tap test/*.js",
+    "pretest": "standard --verbose | snazzy",
+    "test": "tap test/*.js",
     "test:coverage": "npm test -- --coverage",
     "test:onchange:lcovonly": "npm run -s test-coverage -- -R min --coverage-report lcovonly; onchange '**/*.js' -- npm run -s test-coverage -- -R min --coverage-report lcovonly",
     "update": "npm run update:upgrade && npm run update:reinstall",
-    "update:upgrade": "ncu -- --upgrade --upgradeAll",
+    "update:upgrade": "ncu --upgrade --upgradeAll",
     "update:reinstall": "rm -f package-lock.json && rm -rf node_modules && npm cache clear --force && npm install"
   },
   "standard": {

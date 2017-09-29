@@ -13,3 +13,5 @@ ts-node-*
 /.tern-project
 
 /package-lock.json
+
+a.out
