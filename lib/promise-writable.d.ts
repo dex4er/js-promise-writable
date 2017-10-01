@@ -1,7 +1,7 @@
-export class PromiseWritable {
-  readonly stream: NodeJS.WritableStream
+export class PromiseWritable<TWritable extends NodeJS.WritableStream> {
+  readonly stream: TWritable
 
-  constructor (stream: NodeJS.WritableStream)
+  constructor (stream: TWritable)
 
   write (chunk: string | Buffer, encoding?: string): Promise<number>
   writeAll (content: string | Buffer, chunkSize?: number): Promise<number>

@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.0 2017-10-01
+
+  * Typescript: stream is `TWritable extends NodeJS.WritableStream`.
+
 ## v1.1.0 2017-10-01
 
   * PromiseDuplex object is instance of PromiseWritable.
