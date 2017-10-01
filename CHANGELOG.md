@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.0 2017-10-01
+
+  * PromiseDuplex object is instance of PromiseWritable.
+
 ## v1.0.0 2017-09-29
 
   * Exports also as a class and namespace and the default.
