@@ -31,6 +31,12 @@ Feature('Test promise-writable module', () => {
     end () { }
   }
 
+  class MockPromiseDuplex {
+    constructor () {
+      this._isPromiseDuplex = true
+    }
+  }
+
   Scenario('Write chunks to stream which does not pause', () => {
     let promise
     let promiseWritable
@@ -684,6 +690,52 @@ Feature('Test promise-writable module', () => {
 
     Then('promise is rejected', () => {
       return promise.should.be.rejectedWith(Error, 'boom')
+    })
+  })
+
+  Scenario('MockStream instanceof', () => {
+    let stream
+
+    Given('Writable object', () => {
+      stream = new MockStream()
+    })
+
+    Then('other object is not an instance of PromiseWritable class', () => {
+      stream.should.be.not.an.instanceof(PromiseWritable)
+    })
+  })
+
+  Scenario('PromiseWritable instanceof', () => {
+    let promiseWritable
+    let stream
+
+    Given('Writable object', () => {
+      stream = new MockStream()
+    })
+
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
+    })
+
+    Then('PromiseWritable object is an instance of PromiseWritable class', () => {
+      promiseWritable.should.be.an.instanceof(PromiseWritable)
+    })
+  })
+
+  Scenario('PromiseDuplex instanceof', () => {
+    let promiseDuplex
+    let stream
+
+    Given('Writable object', () => {
+      stream = new MockStream()
+    })
+
+    And('PromiseWritable object', () => {
+      promiseDuplex = new MockPromiseDuplex(stream)
+    })
+
+    Then('PromiseWritable object is an instance of PromiseWritable class', () => {
+      promiseDuplex.should.be.an.instanceof(PromiseWritable)
     })
   })
 })

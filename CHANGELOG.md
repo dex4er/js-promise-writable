@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.1 2017-10-02
+
+  * Fixed `instanceof PromiseWritable`.
+
 ## v1.2.0 2017-10-01
 
   * Typescript: stream is `TWritable extends NodeJS.WritableStream`.
