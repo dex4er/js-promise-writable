@@ -11,6 +11,7 @@ chai.should()
 Feature('Test promise-writable module', () => {
   const PromiseWritable = require('../lib/promise-writable')
   const EventEmitter = require('events')
+  const semver = require('semver')
 
   class MockStream extends EventEmitter {
     constructor () {
@@ -693,49 +694,51 @@ Feature('Test promise-writable module', () => {
     })
   })
 
-  Scenario('MockStream instanceof', () => {
-    let stream
+  if (semver.gte(process.version, '6.11.3')) {
+    Scenario('instanceof operator with MockStream class', () => {
+      let stream
 
-    Given('Writable object', () => {
-      stream = new MockStream()
+      Given('Writable object', () => {
+        stream = new MockStream()
+      })
+
+      Then('other object is not an instance of PromiseWritable class', () => {
+        stream.should.be.not.an.instanceof(PromiseWritable)
+      })
     })
 
-    Then('other object is not an instance of PromiseWritable class', () => {
-      stream.should.be.not.an.instanceof(PromiseWritable)
-    })
-  })
+    Scenario('instanceof operator with PromiseWritable class', () => {
+      let promiseWritable
+      let stream
 
-  Scenario('PromiseWritable instanceof', () => {
-    let promiseWritable
-    let stream
+      Given('Writable object', () => {
+        stream = new MockStream()
+      })
 
-    Given('Writable object', () => {
-      stream = new MockStream()
-    })
+      And('PromiseWritable object', () => {
+        promiseWritable = new PromiseWritable(stream)
+      })
 
-    And('PromiseWritable object', () => {
-      promiseWritable = new PromiseWritable(stream)
-    })
-
-    Then('PromiseWritable object is an instance of PromiseWritable class', () => {
-      promiseWritable.should.be.an.instanceof(PromiseWritable)
-    })
-  })
-
-  Scenario('PromiseDuplex instanceof', () => {
-    let promiseDuplex
-    let stream
-
-    Given('Writable object', () => {
-      stream = new MockStream()
+      Then('PromiseWritable object is an instance of PromiseWritable class', () => {
+        promiseWritable.should.be.an.instanceof(PromiseWritable)
+      })
     })
 
-    And('PromiseWritable object', () => {
-      promiseDuplex = new MockPromiseDuplex(stream)
-    })
+    Scenario('instanceof operator with PromiseDuplex class', () => {
+      let promiseDuplex
+      let stream
 
-    Then('PromiseWritable object is an instance of PromiseWritable class', () => {
-      promiseDuplex.should.be.an.instanceof(PromiseWritable)
+      Given('Writable object', () => {
+        stream = new MockStream()
+      })
+
+      And('PromiseWritable object', () => {
+        promiseDuplex = new MockPromiseDuplex(stream)
+      })
+
+      Then('PromiseWritable object is an instance of PromiseWritable class', () => {
+        promiseDuplex.should.be.an.instanceof(PromiseWritable)
+      })
     })
-  })
+  }
 })
