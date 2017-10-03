@@ -111,8 +111,9 @@ await promiseWritable.once(event)
 ```
 
 This method returns `Promise` which is fulfilled when stream emits `event`. The
-result of this event is returned or `undefined` value if stream is already
-finished.
+result of this event is returned.
+
+Promise resolves to `undefined` value if stream is already closed or destoyed.
 
 _Example:_
 

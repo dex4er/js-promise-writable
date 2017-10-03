@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.3.0 2017-10-03
+
+  * `once(event)` is resolved to `undefined` when stream is already closed or
+    destroyed.
+
 ## v1.2.1 2017-10-02
 
   * Fixed `instanceof PromiseWritable`.
