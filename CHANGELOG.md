@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3.1 2017-10-06
+
+  * Typescript: reference additional modules in our typings file.
+
 ## v1.3.0 2017-10-03
 
   * `once(event)` is resolved to `undefined` when stream is already closed or

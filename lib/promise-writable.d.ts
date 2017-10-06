@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 export class PromiseWritable<TWritable extends NodeJS.WritableStream> {
   readonly stream: TWritable
 
