@@ -141,19 +141,6 @@ await promiseWritable.end()
 This method ends the stream and returns `Promise` which is fulfilled when stream
 is finished. No value is returned.
 
-### Promise
-
-This module uses [any-promise](https://www.npmjs.com/package/any-promise) and
-any ES6 Promise library or polyfill is supported.
-
-Ie. [bluebird](https://www.npmjs.com/package/bluebird) can be used as Promise
-library for this module, if it is registered before.
-
-```js
-require('any-promise/register/bluebird')
-const PromiseWritable = require('promise-writable')
-```
-
 ### License
 
 Copyright (c) 2017 Piotr Roszatycki <piotr.roszatycki@gmail.com>
