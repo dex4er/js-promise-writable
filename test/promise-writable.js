@@ -9,7 +9,7 @@ chai.use(chaiAsPromised)
 chai.should()
 
 Feature('Test promise-writable module', () => {
-  const PromiseWritable = require('../lib/promise-writable')
+  const PromiseWritable = require('../lib/promise-writable').PromiseWritable
   const EventEmitter = require('events')
   const semver = require('semver')
 
