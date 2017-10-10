@@ -1,8 +1,12 @@
 # Changelog
 
+## v2.1.1 2017-10-10
+
+  * Typescript: `once('pipe' | 'unpipe')` resolves to `Readable`.
+
 ## v2.1.0 2017-10-10
 
-  * Typescript: PromiseWritable<TWritable extends Writable>.
+  * Typescript: `PromiseWritable<TWritable extends Writable>`.
 
 ## v2.0.1 2017-10-06
 
