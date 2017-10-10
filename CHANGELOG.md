@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.1.0 2017-10-10
+
+  * Typescript: PromiseWritable<TWritable extends Writable>.
+
 ## v2.0.1 2017-10-06
 
   * Do not use UMD import internally.
