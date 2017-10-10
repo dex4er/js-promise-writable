@@ -1,6 +1,6 @@
 {
   "name": "promise-writable",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Return promise for writable stream",
   "main": "lib/promise-writable.js",
   "typings": "lib/promise-writable.d.ts",
@@ -24,7 +24,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "^8.0.33",
+    "@types/node": "^8.0.34",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "semver": "^5.4.1",

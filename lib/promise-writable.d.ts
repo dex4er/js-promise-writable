@@ -1,6 +1,6 @@
 /// <reference types="node" />
 
-import { Writable } from 'stream'
+import { Readable, Writable } from 'stream'
 
 export class PromiseWritable<TWritable extends Writable> {
   readonly stream: TWritable
@@ -12,7 +12,7 @@ export class PromiseWritable<TWritable extends Writable> {
 
   once (event: 'close' | 'error' | 'finish'): Promise<void>
   once (event: 'open'): Promise<number>
-  once (event: 'pipe' | 'unpipe'): Promise<NodeJS.ReadableStream>
+  once (event: 'pipe' | 'unpipe'): Promise<Readable>
 
   end (): Promise<void>
 }
