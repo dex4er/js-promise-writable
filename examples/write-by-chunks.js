@@ -21,6 +21,9 @@ async function main () {
   }
 
   console.info(`Written ${total} bytes in total`)
+
+  await wstream.end()
+  wstream.destroy()
 }
 
 main().catch(console.error)

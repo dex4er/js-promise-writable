@@ -12,6 +12,9 @@ async function main () {
 
   const written = await wstream.writeAll(content, chunkSize)
   console.info(`Written ${written} bytes in total`)
+
+  await wstream.end()
+  wstream.destroy()
 }
 
 main().catch(console.error)

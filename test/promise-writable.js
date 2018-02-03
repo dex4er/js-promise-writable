@@ -8,35 +8,40 @@ const chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
 chai.should()
 
+const EventEmitter = require('events')
+const semver = require('semver')
+
+const PromiseWritable = require('../lib/promise-writable').PromiseWritable
+
+class MockStream extends EventEmitter {
+  constructor () {
+    super()
+    this.bytesWritten = 0
+    this.writable = true
+    this._buffer = Buffer.alloc(0)
+  }
+  write (chunk) {
+    if (this.closed) { return this.emit('error', new Error('writeAll after end')) }
+    this._buffer = Buffer.concat([this._buffer, chunk])
+    this.bytesWritten = this._buffer.length
+    return !chunk.toString().startsWith('pause')
+  }
+  close () {
+    this.closed = true
+  }
+  destroy () {
+    this.destroyed = true
+  }
+  end () {}
+}
+
+class MockPromiseDuplex {
+  constructor () {
+    this._isPromiseDuplex = true
+  }
+}
+
 Feature('Test promise-writable module', () => {
-  const PromiseWritable = require('../lib/promise-writable').PromiseWritable
-  const EventEmitter = require('events')
-  const semver = require('semver')
-
-  class MockStream extends EventEmitter {
-    constructor () {
-      super()
-      this.bytesWritten = 0
-      this.writable = true
-      this._buffer = Buffer.alloc(0)
-    }
-    write (chunk) {
-      if (this.closed) { return this.emit('error', new Error('writeAll after end')) }
-      this._buffer = Buffer.concat([this._buffer, chunk])
-      this.bytesWritten = this._buffer.length
-      return !chunk.toString().startsWith('pause')
-    }
-    close () { this.closed = true }
-    destroy () { this.destroyed = true }
-    end () { }
-  }
-
-  class MockPromiseDuplex {
-    constructor () {
-      this._isPromiseDuplex = true
-    }
-  }
-
   Scenario('Write chunks to stream which does not pause', () => {
     let promise
     let promiseWritable
@@ -204,6 +209,32 @@ Feature('Test promise-writable module', () => {
 
     And('error event is emitted', () => {
       stream.emit('error', new Error('boom'))
+    })
+
+    Then('promise is rejected', () => {
+      return promise.should.be.rejectedWith(Error, 'boom')
+    })
+  })
+
+  Scenario('Write chunk to stream with emitted error', () => {
+    let promise
+    let promiseWritable
+    let stream
+
+    Given('Writable object', () => {
+      stream = new MockStream()
+    })
+
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
+    })
+
+    And('error event is emitted', () => {
+      stream.emit('error', new Error('boom'))
+    })
+
+    When('I call write method which pauses stream', () => {
+      promise = promiseWritable.write(Buffer.from('pause1'))
     })
 
     Then('promise is rejected', () => {
@@ -385,6 +416,32 @@ Feature('Test promise-writable module', () => {
     })
   })
 
+  Scenario('Write all to stream with emitted error', () => {
+    let promise
+    let promiseWritable
+    let stream
+
+    Given('Writable object', () => {
+      stream = new MockStream()
+    })
+
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
+    })
+
+    And('error event is emitted', () => {
+      stream.emit('error', new Error('boom'))
+    })
+
+    When('I call writeAll method which pauses stream', () => {
+      promise = promiseWritable.writeAll(Buffer.from('pause1pause2pause3'))
+    })
+
+    Then('promise is rejected', () => {
+      return promise.should.be.rejectedWith(Error, 'boom')
+    })
+  })
+
   for (const event of ['open', 'close', 'pipe', 'unpipe', 'finish']) {
     Scenario(`Wait for ${event} from stream`, () => {
       let promise
@@ -503,6 +560,32 @@ Feature('Test promise-writable module', () => {
     })
   })
 
+  Scenario('Wait for error from stream with emitted error', () => {
+    let promise
+    let promiseWritable
+    let stream
+
+    Given('Writable object', () => {
+      stream = new MockStream()
+    })
+
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
+    })
+
+    And('error event is emitted', () => {
+      stream.emit('error', new Error('boom'))
+    })
+
+    When("I call once('error') method", () => {
+      promise = promiseWritable.once('error')
+    })
+
+    Then('promise is rejected', () => {
+      return promise.should.be.rejectedWith(Error, 'boom')
+    })
+  })
+
   Scenario('End the stream', () => {
     let promise
     let promiseWritable
@@ -578,6 +661,32 @@ Feature('Test promise-writable module', () => {
 
     And('error event is emitted', () => {
       stream.emit('error', new Error('boom'))
+    })
+
+    Then('promise is rejected', () => {
+      return promise.should.be.rejectedWith(Error, 'boom')
+    })
+  })
+
+  Scenario('End the stream with emitted error', () => {
+    let promise
+    let promiseWritable
+    let stream
+
+    Given('Writable object', () => {
+      stream = new MockStream()
+    })
+
+    And('PromiseWritable object', () => {
+      promiseWritable = new PromiseWritable(stream)
+    })
+
+    And('error event is emitted', () => {
+      stream.emit('error', new Error('boom'))
+    })
+
+    When('I call end method', () => {
+      promise = promiseWritable.end()
     })
 
     Then('promise is rejected', () => {

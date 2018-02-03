@@ -4,9 +4,9 @@
 
 This module allows to convert
 [`Writable`](https://nodejs.org/api/stream.html#stream_class_stream_writable)
-stream into its promisified version, which returns [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-object fulfilled when
-[`open`](https://nodejs.org/api/fs.html#fs_event_open),
+stream into its promisified version, which returns
+[`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+object fulfilled when [`open`](https://nodejs.org/api/fs.html#fs_event_open),
 [`close`](https://nodejs.org/api/fs.html#fs_event_close),
 [`pipe`](https://nodejs.org/api/stream.html#stream_event_pipe),
 [`unpipe`](https://nodejs.org/api/stream.html#stream_event_unpipe),
@@ -140,6 +140,14 @@ await promiseWritable.end()
 
 This method ends the stream and returns `Promise` which is fulfilled when stream
 is finished. No value is returned.
+
+#### destroy
+
+```js
+promiseReadable.destroy()
+```
+
+This method calls destroy method on stream and cleans up all own handlers.
 
 ### License
 

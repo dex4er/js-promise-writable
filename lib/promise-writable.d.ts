@@ -15,6 +15,8 @@ export class PromiseWritable<TWritable extends Writable> {
   once (event: 'pipe' | 'unpipe'): Promise<Readable>
 
   end (): Promise<void>
+
+  destroy (): void
 }
 
 export default PromiseWritable
