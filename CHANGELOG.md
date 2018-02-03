@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.0.0 2018-02-03
+
+  *
+
 ## v2.1.1 2017-10-10
 
   * Typescript: `once('pipe' | 'unpipe')` resolves to `Readable`.
