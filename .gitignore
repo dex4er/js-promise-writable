@@ -16,3 +16,5 @@ ts-node-*
 /yarn.lock
 
 a.out
+
+/.vscode
