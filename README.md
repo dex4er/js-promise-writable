@@ -149,6 +149,13 @@ promiseReadable.destroy()
 
 This method calls destroy method on stream and cleans up all own handlers.
 
+### See also
+
+[`PromiseReadable`](https://www.npmjs.com/package/promise-readable),
+[`PromiseDuplex`](https://www.npmjs.com/package/promise-duplex),
+[`PromiseSocket`](https://www.npmjs.com/package/promise-socket),
+[`PromisePiping`](https://www.npmjs.com/package/promise-piping).
+
 ### License
 
 Copyright (c) 2017-2018 Piotr Roszatycki <piotr.roszatycki@gmail.com>
