@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.1.0 2018-02-04
+
+  * Support `import PromiseWritable from 'promise-writable'` syntax.
+
 ## v3.0.0 2018-02-03
 
   * New method `destroy`.

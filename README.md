@@ -37,20 +37,20 @@ const promiseWritable = new PromiseWritable(stream)
 _Example:_
 
 ```js
-const { PromiseWritable } = require('promise-writable')
-const { createWriteStream } = require('fs')
+const PromiseWritable = require('promise-writable')
+const fs = require('fs')
 
-const stream = createWriteStream('/tmp/test.txt')
+const stream = fs.createWriteStream('/tmp/test.txt')
 const promiseWritable = new PromiseWritable(stream)
 ```
 
 _Typescript:_
 
 ```ts
-import { PromiseWritable } from 'promise-writable'
-import { createWriteStream } from 'fs'
+import PromiseWritable from 'promise-writable'
+import fs from 'fs'
 
-const stream = createWriteStream('/tmp/test.txt')
+const stream = fs.createWriteStream('/tmp/test.txt')
 const promiseWritable = new PromiseWritable(stream)
 ```
 
@@ -144,7 +144,7 @@ is finished. No value is returned.
 #### destroy
 
 ```js
-promiseReadable.destroy()
+promiseWritable.destroy()
 ```
 
 This method calls destroy method on stream and cleans up all own handlers.

@@ -8,10 +8,10 @@ const chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
 chai.should()
 
-const EventEmitter = require('events')
+const EventEmitter = require('events').EventEmitter
 const semver = require('semver')
 
-const PromiseWritable = require('../lib/promise-writable').PromiseWritable
+const PromiseWritable = require('../lib/promise-writable')
 
 class MockStream extends EventEmitter {
   constructor () {

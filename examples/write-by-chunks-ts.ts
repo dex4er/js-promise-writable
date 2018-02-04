@@ -1,6 +1,6 @@
-import { PromiseWritable } from '../lib/promise-writable'
+import PromiseWritable from '../lib/promise-writable'
 
-import * as fs from 'fs'
+import fs from 'fs'
 
 async function main (): Promise<void> {
   const wstream = new PromiseWritable(fs.createWriteStream(process.argv[2] || 'a.out'))

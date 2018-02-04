@@ -1,6 +1,6 @@
 'use strict'
 
-const { PromiseWritable } = require('../lib/promise-writable')
+const PromiseWritable = require('../lib/promise-writable')
 
 const fs = require('fs')
 
