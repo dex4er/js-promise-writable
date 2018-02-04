@@ -19,11 +19,19 @@ class MockStream extends EventEmitter {
     this.bytesWritten = 0
     this.writable = true
     this._buffer = Buffer.alloc(0)
+    this._buffer2 = Buffer.alloc(0)
+    this._corked = false
   }
   write (chunk) {
-    if (this.closed) { return this.emit('error', new Error('writeAll after end')) }
-    this._buffer = Buffer.concat([this._buffer, chunk])
-    this.bytesWritten = this._buffer.length
+    if (this.closed) {
+      return this.emit('error', new Error('writeAll after end'))
+    }
+    if (this._corked) {
+      this._buffer2 = Buffer.concat([this._buffer2, chunk])
+    } else {
+      this._buffer = Buffer.concat([this._buffer, chunk])
+      this.bytesWritten = this._buffer.length
+    }
     return !chunk.toString().startsWith('pause')
   }
   close () {
@@ -31,6 +39,15 @@ class MockStream extends EventEmitter {
   }
   destroy () {
     this.destroyed = true
+  }
+  cork () {
+    this._corked = true
+  }
+  uncork () {
+    this._corked = false
+    this._buffer = Buffer.concat([this._buffer, this._buffer2])
+    this._buffer2 = Buffer.alloc(0)
+    this.bytesWritten = this._buffer.length
   }
   end () {}
 }

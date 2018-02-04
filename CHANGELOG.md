@@ -4,6 +4,7 @@
 
   * New method `destroy`.
   * Bugfix when `PromiseWritable` could ignore `error` event.
+  * `writeAll` corks stream and waits for `drain` event.
 
 ## v2.1.1 2017-10-10
 
