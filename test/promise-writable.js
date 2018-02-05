@@ -95,6 +95,14 @@ Feature('Test promise-writable module', () => {
     And('stream should contain another chunk', () => {
       stream._buffer.should.deep.equal(Buffer.from('chunk1chunk2'))
     })
+
+    And('PromiseWritable object can be destroyed', () => {
+      promiseWritable.destroy()
+    })
+
+    And('PromiseWritable object can be destroyed', () => {
+      promiseWritable.destroy()
+    })
   })
 
   Scenario('Write chunks to stream which pauses', () => {
@@ -205,6 +213,14 @@ Feature('Test promise-writable module', () => {
     Then('promise is rejected', () => {
       return error.should.be.an('error', 'write after end')
     })
+
+    And('PromiseWritable object can be destroyed', () => {
+      promiseWritable.destroy()
+    })
+
+    And('PromiseWritable object can be destroyed', () => {
+      promiseWritable.destroy()
+    })
   })
 
   Scenario('Write chunk to stream with error', () => {
@@ -230,6 +246,14 @@ Feature('Test promise-writable module', () => {
 
     Then('promise is rejected', () => {
       return promise.should.be.rejectedWith(Error, 'boom')
+    })
+
+    And('PromiseWritable object can be destroyed', () => {
+      promiseWritable.destroy()
+    })
+
+    And('PromiseWritable object can be destroyed', () => {
+      promiseWritable.destroy()
     })
   })
 
