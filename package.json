@@ -27,6 +27,7 @@
     "@types/node": "^9.4.7",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
+    "markdownlint-cli": "^0.7.1",
     "semver": "^5.5.0",
     "snazzy": "^7.1.1",
     "standard": "^11.0.0",
@@ -37,13 +38,10 @@
     "typescript": "^2.7.2"
   },
   "scripts": {
-    "pretest": "standard --verbose | snazzy && tsc --noEmit --pretty && tslint -t stylish -p .",
+    "pretest": "standard --verbose | snazzy && tsc --noEmit --pretty && tslint -t stylish -p . && markdownlint *.md",
     "test": "tap test/*.js",
     "test:coverage": "npm test -- --coverage",
-    "test:onchange:lcovonly": "npm run -s test-coverage -- -R min --coverage-report lcovonly; onchange '**/*.js' -- npm run -s test-coverage -- -R min --coverage-report lcovonly",
-    "update": "npm run update:upgrade && npm run update:reinstall",
-    "update:upgrade": "ncu --upgrade --upgradeAll",
-    "update:reinstall": "rm -f package-lock.json && rm -rf node_modules && npm cache clear --force && npm install"
+    "test:onchange:lcovonly": "npm run -s test-coverage -- -R min --coverage-report lcovonly; onchange '**/*.js' -- npm run -s test-coverage -- -R min --coverage-report lcovonly"
   },
   "standard": {
     "globals": [

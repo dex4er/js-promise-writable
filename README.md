@@ -1,6 +1,8 @@
-## promise-writable
+# promise-writable
 
+<!-- markdownlint-disable MD013 -->
 [![Build Status](https://secure.travis-ci.org/dex4er/js-promise-writable.svg)](http://travis-ci.org/dex4er/js-promise-writable) [![Coverage Status](https://coveralls.io/repos/github/dex4er/js-promise-writable/badge.svg)](https://coveralls.io/github/dex4er/js-promise-writable) [![npm](https://img.shields.io/npm/v/promise-writable.svg)](https://www.npmjs.com/package/promise-writable)
+<!-- markdownlint-enable MD013 -->
 
 This module allows to convert
 [`Writable`](https://nodejs.org/api/stream.html#stream_class_stream_writable)
@@ -14,19 +16,19 @@ object fulfilled when [`open`](https://nodejs.org/api/fs.html#fs_event_open),
 [`error`](https://nodejs.org/api/stream.html#stream_event_error) events
 occurred.
 
-### Requirements
+## Requirements
 
 This module requires Node >= 4.
 
-### Installation
+## Installation
 
 ```shell
 npm install promise-writable
 ```
 
-### Usage
+## Usage
 
-#### constructor
+### constructor
 
 ```js
 const promiseWritable = new PromiseWritable(stream)
@@ -54,7 +56,7 @@ const stream = fs.createWriteStream('/tmp/test.txt')
 const promiseWritable = new PromiseWritable(stream)
 ```
 
-#### stream
+### stream
 
 ```js
 const stream = promiseWritable.stream
@@ -68,7 +70,7 @@ _Example:_
 console.log(promiseWritable.stream.flags)
 ```
 
-#### write
+### write
 
 ```js
 const written = await promiseWritable.write(chunk)
@@ -86,7 +88,7 @@ _Example:_
 const written = await promiseWritable.write(new Buffer('foo'))
 ```
 
-#### writeAll
+### writeAll
 
 ```js
 const total = await promiseWritable.writeAll(content, chunkSize)
@@ -104,7 +106,7 @@ _Example:_
 const total = await promiseWritable.writeAll(new Buffer('foobarbaz'), 3)
 ```
 
-#### once
+### once
 
 ```js
 await promiseWritable.once(event)
@@ -132,7 +134,7 @@ process.stdin.unpipe(promiseWritable.stream)
 const src = await promise
 ```
 
-#### end
+### end
 
 ```js
 await promiseWritable.end()
@@ -141,7 +143,7 @@ await promiseWritable.end()
 This method ends the stream and returns `Promise` which is fulfilled when stream
 is finished. No value is returned.
 
-#### destroy
+### destroy
 
 ```js
 promiseWritable.destroy()
@@ -149,15 +151,15 @@ promiseWritable.destroy()
 
 This method calls destroy method on stream and cleans up all own handlers.
 
-### See also
+## See also
 
 [`PromiseReadable`](https://www.npmjs.com/package/promise-readable),
 [`PromiseDuplex`](https://www.npmjs.com/package/promise-duplex),
 [`PromiseSocket`](https://www.npmjs.com/package/promise-socket),
 [`PromisePiping`](https://www.npmjs.com/package/promise-piping).
 
-### License
+## License
 
-Copyright (c) 2017-2018 Piotr Roszatycki <piotr.roszatycki@gmail.com>
+Copyright (c) 2017-2018 Piotr Roszatycki <mailto:piotr.roszatycki@gmail.com>
 
 [MIT](https://opensource.org/licenses/MIT)
