@@ -1,5 +1,12 @@
 # Changelog
 
+## v4.0.0 2019-05-09
+
+* Rewritten in Typescript.
+* `PromiseWritable` constructor accepts `NodeJS.WritableStream`.
+* `write` method uses `encoding` argument if `chunk` is string.
+* Dropped support for Node < 6.
+
 ## v3.1.2 2018-02-13
 
 * Use markdownlint.

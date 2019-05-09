@@ -18,12 +18,18 @@ occurred.
 
 ## Requirements
 
-This module requires Node >= 4.
+This module requires Node >= 6.
 
 ## Installation
 
 ```shell
 npm install promise-writable
+```
+
+_Additionally for Typescript:_
+
+```shell
+npm install -D @types/node
 ```
 
 ## Usage
@@ -39,7 +45,7 @@ const promiseWritable = new PromiseWritable(stream)
 _Example:_
 
 ```js
-const PromiseWritable = require('promise-writable')
+const {PromiseWritable} = require('promise-writable')
 const fs = require('fs')
 
 const stream = fs.createWriteStream('/tmp/test.txt')
@@ -160,6 +166,6 @@ This method calls destroy method on stream and cleans up all own handlers.
 
 ## License
 
-Copyright (c) 2017-2018 Piotr Roszatycki <mailto:piotr.roszatycki@gmail.com>
+Copyright (c) 2017-2019 Piotr Roszatycki <mailto:piotr.roszatycki@gmail.com>
 
 [MIT](https://opensource.org/licenses/MIT)

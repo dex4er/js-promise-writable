@@ -1,8 +1,8 @@
-import PromiseWritable from '../lib/promise-writable'
-
 import fs from 'fs'
 
-async function main (): Promise<void> {
+import PromiseWritable from '../src/promise-writable'
+
+async function main(): Promise<void> {
   const wstream = new PromiseWritable(fs.createWriteStream(process.argv[2] || 'a.out'))
   const size = Number(process.argv[3]) || 1000
   const chunkSize = Number(process.argv[4]) || 64 * 1024

@@ -1,56 +1,69 @@
-'use strict'
+/// <reference types="node" />
 
-class PromiseWritable {
-  constructor (stream) {
+interface WritableStream extends NodeJS.WritableStream {
+  bytesWritten?: number
+  closed?: boolean
+  destroyed?: boolean
+  cork?(): void
+  uncork?(): void
+  destroy?(): void
+}
+
+export class PromiseWritable<TWritable extends WritableStream> {
+  static [Symbol.hasInstance](instance: PromiseWritable<WritableStream>): boolean {
+    return instance.isPromiseWritable
+  }
+
+  readonly isPromiseWritable: boolean = true
+
+  private readonly errorHandler?: (err: Error) => void
+  private errored?: Error
+
+  constructor(readonly stream: TWritable) {
     this.stream = stream
 
-    this._isPromiseWritable = true
-
-    this._errorHandler = (err) => {
-      this._errored = err
+    this.errorHandler = (err: Error) => {
+      this.errored = err
     }
 
-    stream.on('error', this._errorHandler)
+    stream.on('error', this.errorHandler)
   }
 
-  static [Symbol.hasInstance] (instance) {
-    return instance._isPromiseWritable || instance._isPromiseDuplex
-  }
-
-  write (chunk, encoding) {
+  write(chunk: string | Buffer, encoding?: string): Promise<number> {
     const stream = this.stream
 
     let rejected = false
 
     return new Promise((resolve, reject) => {
-      if (this._errored) {
-        const err = this._errored
-        delete this._errored
+      if (this.errored) {
+        const err = this.errored
+        this.errored = undefined
         return reject(err)
       }
 
       if (!stream.writable || stream.closed || stream.destroyed) {
-        return reject(new Error(`write after end`))
+        return reject(new Error('write after end'))
       }
 
-      const errorHandler = (err) => {
-        delete this._errored
+      const writeErrorHandler = (err: Error) => {
+        this.errored = undefined
         rejected = true
         reject(err)
       }
 
-      stream.once('error', errorHandler)
+      stream.once('error', writeErrorHandler)
 
-      const canWrite = stream.write(chunk)
-      stream.removeListener('error', errorHandler)
+      const canWrite = typeof chunk === 'string' ? stream.write(chunk, encoding) : stream.write(chunk)
+
+      stream.removeListener('error', writeErrorHandler)
 
       if (canWrite) {
         if (!rejected) {
           resolve(chunk.length)
         }
       } else {
-        const errorHandler = (err) => {
-          delete this._errored
+        const errorHandler = (err: Error) => {
+          this.errored = undefined
           removeListeners()
           reject(err)
         }
@@ -85,20 +98,18 @@ class PromiseWritable {
     })
   }
 
-  writeAll (content, chunkSize) {
-    chunkSize = chunkSize || 64 * 1024
-
+  writeAll(content: string | Buffer, chunkSize: number = 64 * 1024): Promise<number> {
     const stream = this.stream
 
     return new Promise((resolve, reject) => {
-      if (this._errored) {
-        const err = this._errored
-        delete this._errored
+      if (this.errored) {
+        const err = this.errored
+        this.errored = undefined
         return reject(err)
       }
 
       if (!stream.writable || stream.closed || stream.destroyed) {
-        return reject(new Error(`writeAll after end`))
+        return reject(new Error('writeAll after end'))
       }
 
       let part = 0
@@ -109,8 +120,10 @@ class PromiseWritable {
       }
 
       const drainHandler = () => {
-        stream.cork()
-        while (stream.writable && !this._errored && part * chunkSize < content.length) {
+        if (typeof stream.cork === 'function') {
+          stream.cork()
+        }
+        while (stream.writable && !this.errored && part * chunkSize < content.length) {
           const chunk = content.slice(part * chunkSize, ++part * chunkSize)
           const canWrite = stream.write(chunk)
           if (part * chunkSize >= content.length) {
@@ -120,11 +133,13 @@ class PromiseWritable {
             break
           }
         }
-        stream.uncork()
+        if (typeof stream.uncork === 'function') {
+          stream.uncork()
+        }
       }
 
-      const errorHandler = (err) => {
-        delete this._errored
+      const errorHandler = (err: Error) => {
+        this.errored = undefined
         removeListeners()
         reject(err)
       }
@@ -150,18 +165,22 @@ class PromiseWritable {
     })
   }
 
-  once (event) {
+  once(event: 'close' | 'error' | 'finish'): Promise<void>
+  once(event: 'open'): Promise<number>
+  once(event: 'pipe' | 'unpipe'): Promise<NodeJS.ReadableStream>
+
+  once(event: string): Promise<void | number | NodeJS.ReadableStream> {
     const stream = this.stream
 
     return new Promise((resolve, reject) => {
-      if (this._errored) {
-        const err = this._errored
-        delete this._errored
+      if (this.errored) {
+        const err = this.errored
+        this.errored = undefined
         return reject(err)
       }
 
-      if (this._errored) {
-        return reject(this._errored)
+      if (this.errored) {
+        return reject(this.errored)
       } else if (stream.closed) {
         if (event === 'close') {
           return resolve()
@@ -181,21 +200,27 @@ class PromiseWritable {
         resolve()
       }
 
-      const eventHandler = event !== 'close' && event !== 'finish' && event !== 'error' ? (argument) => {
-        removeListeners()
-        resolve(argument)
-      } : undefined
+      const eventHandler =
+        event !== 'close' && event !== 'finish' && event !== 'error'
+          ? (argument: any) => {
+              removeListeners()
+              resolve(argument)
+            }
+          : undefined
 
-      const errorHandler = (err) => {
-        delete this._errored
+      const errorHandler = (err: Error) => {
+        this.errored = undefined
         removeListeners()
         reject(err)
       }
 
-      const finishHandler = event !== 'close' ? () => {
-        removeListeners()
-        resolve()
-      } : undefined
+      const finishHandler =
+        event !== 'close'
+          ? () => {
+              removeListeners()
+              resolve()
+            }
+          : undefined
 
       const removeListeners = () => {
         if (eventHandler) {
@@ -219,13 +244,13 @@ class PromiseWritable {
     })
   }
 
-  end () {
+  end(): Promise<void> {
     const stream = this.stream
 
     return new Promise((resolve, reject) => {
-      if (this._errored) {
-        const err = this._errored
-        delete this._errored
+      if (this.errored) {
+        const err = this.errored
+        this.errored = undefined
         return reject(err)
       }
 
@@ -238,8 +263,8 @@ class PromiseWritable {
         resolve()
       }
 
-      const errorHandler = (err) => {
-        delete this._errored
+      const errorHandler = (err: Error) => {
+        this.errored = undefined
         removeListeners()
         reject(err)
       }
@@ -256,21 +281,16 @@ class PromiseWritable {
     })
   }
 
-  destroy () {
+  destroy(): void {
     if (this.stream) {
-      if (this._errorHandler) {
-        this.stream.removeListener('error', this._errorHandler)
-        delete this._errorHandler
+      if (this.errorHandler) {
+        this.stream.removeListener('error', this.errorHandler)
       }
       if (typeof this.stream.destroy === 'function') {
         this.stream.destroy()
       }
-      delete this.stream
     }
   }
 }
 
-PromiseWritable.PromiseWritable = PromiseWritable
-PromiseWritable.default = PromiseWritable
-
-module.exports = PromiseWritable
+export default PromiseWritable

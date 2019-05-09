@@ -1,10 +1,8 @@
-'use strict'
+import fs from 'fs'
 
-const fs = require('fs')
+import PromiseWritable from '../src/promise-writable'
 
-const PromiseWritable = require('../lib/promise-writable').default
-
-async function main() {
+async function main(): Promise<void> {
   const wstream = new PromiseWritable(fs.createWriteStream(process.argv[2] || 'a.out'))
   const size = Number(process.argv[3]) || 1000
   const chunkSize = Number(process.argv[4]) || 64 * 1024
