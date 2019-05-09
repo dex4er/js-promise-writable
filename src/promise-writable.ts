@@ -4,26 +4,28 @@ interface WritableStream extends NodeJS.WritableStream {
   bytesWritten?: number
   closed?: boolean
   destroyed?: boolean
+
   cork?(): void
   uncork?(): void
+
   destroy?(): void
 }
 
 export class PromiseWritable<TWritable extends WritableStream> {
   static [Symbol.hasInstance](instance: PromiseWritable<WritableStream>): boolean {
-    return instance.isPromiseWritable
+    return instance._isPromiseWritable
   }
 
-  readonly isPromiseWritable: boolean = true
+  readonly _isPromiseWritable: boolean = true
+  _errored?: Error
 
-  private readonly errorHandler?: (err: Error) => void
-  private errored?: Error
+  private readonly errorHandler: (err: Error) => void
 
   constructor(readonly stream: TWritable) {
     this.stream = stream
 
     this.errorHandler = (err: Error) => {
-      this.errored = err
+      this._errored = err
     }
 
     stream.on('error', this.errorHandler)
@@ -35,9 +37,9 @@ export class PromiseWritable<TWritable extends WritableStream> {
     let rejected = false
 
     return new Promise((resolve, reject) => {
-      if (this.errored) {
-        const err = this.errored
-        this.errored = undefined
+      if (this._errored) {
+        const err = this._errored
+        this._errored = undefined
         return reject(err)
       }
 
@@ -46,7 +48,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
       }
 
       const writeErrorHandler = (err: Error) => {
-        this.errored = undefined
+        this._errored = undefined
         rejected = true
         reject(err)
       }
@@ -63,7 +65,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
         }
       } else {
         const errorHandler = (err: Error) => {
-          this.errored = undefined
+          this._errored = undefined
           removeListeners()
           reject(err)
         }
@@ -102,9 +104,9 @@ export class PromiseWritable<TWritable extends WritableStream> {
     const stream = this.stream
 
     return new Promise((resolve, reject) => {
-      if (this.errored) {
-        const err = this.errored
-        this.errored = undefined
+      if (this._errored) {
+        const err = this._errored
+        this._errored = undefined
         return reject(err)
       }
 
@@ -123,7 +125,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
         if (typeof stream.cork === 'function') {
           stream.cork()
         }
-        while (stream.writable && !this.errored && part * chunkSize < content.length) {
+        while (stream.writable && !this._errored && part * chunkSize < content.length) {
           const chunk = content.slice(part * chunkSize, ++part * chunkSize)
           const canWrite = stream.write(chunk)
           if (part * chunkSize >= content.length) {
@@ -139,7 +141,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
       }
 
       const errorHandler = (err: Error) => {
-        this.errored = undefined
+        this._errored = undefined
         removeListeners()
         reject(err)
       }
@@ -173,14 +175,14 @@ export class PromiseWritable<TWritable extends WritableStream> {
     const stream = this.stream
 
     return new Promise((resolve, reject) => {
-      if (this.errored) {
-        const err = this.errored
-        this.errored = undefined
+      if (this._errored) {
+        const err = this._errored
+        this._errored = undefined
         return reject(err)
       }
 
-      if (this.errored) {
-        return reject(this.errored)
+      if (this._errored) {
+        return reject(this._errored)
       } else if (stream.closed) {
         if (event === 'close') {
           return resolve()
@@ -209,7 +211,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
           : undefined
 
       const errorHandler = (err: Error) => {
-        this.errored = undefined
+        this._errored = undefined
         removeListeners()
         reject(err)
       }
@@ -248,9 +250,9 @@ export class PromiseWritable<TWritable extends WritableStream> {
     const stream = this.stream
 
     return new Promise((resolve, reject) => {
-      if (this.errored) {
-        const err = this.errored
-        this.errored = undefined
+      if (this._errored) {
+        const err = this._errored
+        this._errored = undefined
         return reject(err)
       }
 
@@ -264,7 +266,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
       }
 
       const errorHandler = (err: Error) => {
-        this.errored = undefined
+        this._errored = undefined
         removeListeners()
         reject(err)
       }
