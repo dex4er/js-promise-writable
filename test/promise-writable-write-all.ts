@@ -31,7 +31,7 @@ Feature("Test promise-writable module for writeAll method", () => {
     })
 
     Then("promise is fulfilled", () => {
-      return expect(bytes).to.equal(18)
+      expect(bytes).to.equal(18)
     })
 
     And("stream should contain this chunk", () => {
@@ -63,7 +63,7 @@ Feature("Test promise-writable module for writeAll method", () => {
     })
 
     Then("promise is fulfilled", () => {
-      return expect(bytes).to.equal(18)
+      expect(bytes).to.equal(18)
     })
 
     And("stream should contain this chunk", () => {
@@ -101,7 +101,7 @@ Feature("Test promise-writable module for writeAll method", () => {
     })
 
     Then("promise is fulfilled", () => {
-      return expect(bytes).to.equal(18)
+      expect(bytes).to.equal(18)
     })
 
     And("stream should contain this chunk", () => {

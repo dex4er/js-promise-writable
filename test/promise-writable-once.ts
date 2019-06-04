@@ -1,4 +1,7 @@
-import {expect} from "chai"
+import chai, {expect} from "chai"
+
+import dirtyChai from "dirty-chai"
+chai.use(dirtyChai)
 
 import {And, Feature, Given, Scenario, Then, When} from "./lib/steps"
 
@@ -32,7 +35,7 @@ Feature("Test promise-writable module for once method", () => {
       })
 
       Then("promise is fulfilled", () => {
-        return expect(evented).to.be.true
+        expect(evented).to.be.true()
       })
     })
 
@@ -67,7 +70,7 @@ Feature("Test promise-writable module for once method", () => {
 
       if (event === "close") {
         Then("promise returns undefined", () => {
-          return expect(evented).to.be.true
+          expect(evented).to.be.true()
         })
       } else {
         Then("promise is rejected", () => {

@@ -25,7 +25,7 @@ Feature("Test promise-writable module for write method", () => {
     })
 
     Then("promise is fulfilled", () => {
-      return expect(bytes).to.equal(6)
+      expect(bytes).to.equal(6)
     })
 
     And("stream should contain this chunk", () => {
@@ -37,7 +37,7 @@ Feature("Test promise-writable module for write method", () => {
     })
 
     Then("promise is fulfilled", () => {
-      return expect(bytes).to.equal(6)
+      expect(bytes).to.equal(6)
     })
 
     And("stream should contain another chunk", () => {
@@ -77,7 +77,7 @@ Feature("Test promise-writable module for write method", () => {
     })
 
     Then("promise is fulfilled", () => {
-      return expect(bytes).to.equal(6)
+      expect(bytes).to.equal(6)
     })
 
     And("stream should contain this chunk", () => {
@@ -95,7 +95,7 @@ Feature("Test promise-writable module for write method", () => {
     })
 
     Then("promise is fulfilled", () => {
-      return expect(bytes).to.equal(6)
+      expect(bytes).to.equal(6)
     })
 
     And("stream should contain another chunk", () => {
@@ -131,7 +131,7 @@ Feature("Test promise-writable module for write method", () => {
     })
 
     Then("promise is rejected", () => {
-      return expect(error)
+      expect(error)
         .to.be.an("error")
         .with.property("message", "write after end")
     })
@@ -165,7 +165,7 @@ Feature("Test promise-writable module for write method", () => {
     })
 
     Then("promise is rejected", () => {
-      return expect(error)
+      expect(error)
         .to.be.an("error")
         .with.property("message", "write after end")
     })
@@ -203,7 +203,7 @@ Feature("Test promise-writable module for write method", () => {
     })
 
     Then("promise is rejected", () => {
-      return expect(error)
+      expect(error)
         .to.be.an("error")
         .with.property("message", "boom")
     })
@@ -241,7 +241,7 @@ Feature("Test promise-writable module for write method", () => {
     })
 
     Then("promise is rejected", () => {
-      return expect(error)
+      expect(error)
         .to.be.an("error")
         .with.property("message", "boom")
     })
