@@ -1,11 +1,11 @@
-'use strict'
+"use strict"
 
-const fs = require('fs')
+const fs = require("fs")
 
-const PromiseWritable = require('../lib/promise-writable').default
+const PromiseWritable = require("../lib/promise-writable").default
 
 async function main() {
-  const wstream = new PromiseWritable(fs.createWriteStream(process.argv[2] || 'a.out'))
+  const wstream = new PromiseWritable(fs.createWriteStream(process.argv[2] || "a.out"))
   const size = Number(process.argv[3]) || 1000
   const chunkSize = Number(process.argv[4]) || 64 * 1024
 

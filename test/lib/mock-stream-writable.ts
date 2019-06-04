@@ -1,4 +1,4 @@
-import {Writable} from 'stream'
+import {Writable} from "stream"
 
 export class MockStreamWritable extends Writable {
   writable = true
@@ -17,7 +17,7 @@ export class MockStreamWritable extends Writable {
   write(chunk: any, encoding: string, cb?: (error: Error | null | undefined) => void): boolean
   write(chunk: any, _arg2?: any, _arg3?: any): boolean {
     if (this.closed) {
-      return this.emit('error', new Error('writeAll after end'))
+      return this.emit("error", new Error("writeAll after end"))
     }
     if (this.corked) {
       this.buffer2 = Buffer.concat([this.buffer2, chunk])
@@ -25,7 +25,7 @@ export class MockStreamWritable extends Writable {
       this.buffer = Buffer.concat([this.buffer, chunk])
       this.bytesWritten = this.buffer.length
     }
-    return !chunk.toString().startsWith('pause')
+    return !chunk.toString().startsWith("pause")
   }
   close(): void {
     this.closed = true

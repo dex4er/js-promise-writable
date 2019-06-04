@@ -1,23 +1,23 @@
-import {expect} from 'chai'
+import {expect} from "chai"
 
-import {And, Feature, Given, Scenario, Then, When} from './lib/steps'
+import {And, Feature, Given, Scenario, Then, When} from "./lib/steps"
 
-import {MockStreamWritable} from './lib/mock-stream-writable'
+import {MockStreamWritable} from "./lib/mock-stream-writable"
 
-import {PromiseWritable} from '../src/promise-writable'
+import {PromiseWritable} from "../src/promise-writable"
 
-Feature('Test promise-writable module for once method', () => {
-  for (const event of ['open', 'close', 'pipe', 'unpipe', 'finish']) {
+Feature("Test promise-writable module for once method", () => {
+  for (const event of ["open", "close", "pipe", "unpipe", "finish"]) {
     Scenario(`Wait for ${event} from stream`, () => {
       let evented = false
       let promiseWritable: PromiseWritable<MockStreamWritable>
       let stream: MockStreamWritable
 
-      Given('Writable object', () => {
+      Given("Writable object", () => {
         stream = new MockStreamWritable()
       })
 
-      And('PromiseWritable object', () => {
+      And("PromiseWritable object", () => {
         promiseWritable = new PromiseWritable(stream)
       })
 
@@ -31,7 +31,7 @@ Feature('Test promise-writable module for once method', () => {
         stream.emit(event)
       })
 
-      Then('promise is fulfilled', () => {
+      Then("promise is fulfilled", () => {
         return expect(evented).to.be.true
       })
     })
@@ -42,15 +42,15 @@ Feature('Test promise-writable module for once method', () => {
       let promiseWritable: PromiseWritable<MockStreamWritable>
       let stream: MockStreamWritable
 
-      Given('Writable object', () => {
+      Given("Writable object", () => {
         stream = new MockStreamWritable()
       })
 
-      And('PromiseWritable object', () => {
+      And("PromiseWritable object", () => {
         promiseWritable = new PromiseWritable(stream)
       })
 
-      When('stream is closed', () => {
+      When("stream is closed", () => {
         stream.close()
       })
 
@@ -65,15 +65,15 @@ Feature('Test promise-writable module for once method', () => {
           })
       })
 
-      if (event === 'close') {
-        Then('promise returns undefined', () => {
+      if (event === "close") {
+        Then("promise returns undefined", () => {
           return expect(evented).to.be.true
         })
       } else {
-        Then('promise is rejected', () => {
+        Then("promise is rejected", () => {
           expect(error)
-            .to.be.an('error')
-            .with.property('message', `once ${event} after close`)
+            .to.be.an("error")
+            .with.property("message", `once ${event} after close`)
         })
       }
     })
@@ -83,11 +83,11 @@ Feature('Test promise-writable module for once method', () => {
       let promiseWritable: PromiseWritable<MockStreamWritable>
       let stream: MockStreamWritable
 
-      Given('Writable object', () => {
+      Given("Writable object", () => {
         stream = new MockStreamWritable()
       })
 
-      And('PromiseWritable object', () => {
+      And("PromiseWritable object", () => {
         promiseWritable = new PromiseWritable(stream)
       })
 
@@ -97,14 +97,14 @@ Feature('Test promise-writable module for once method', () => {
         })
       })
 
-      And('error event is emitted', () => {
-        stream.emit('error', new Error('boom'))
+      And("error event is emitted", () => {
+        stream.emit("error", new Error("boom"))
       })
 
-      Then('promise is rejected', () => {
+      Then("promise is rejected", () => {
         expect(error)
-          .to.be.an('error')
-          .with.property('message', 'boom')
+          .to.be.an("error")
+          .with.property("message", "boom")
       })
     })
   }

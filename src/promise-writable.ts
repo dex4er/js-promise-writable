@@ -28,7 +28,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
       this._errored = err
     }
 
-    stream.on('error', this.errorHandler)
+    stream.on("error", this.errorHandler)
   }
 
   write(chunk: string | Buffer, encoding?: string): Promise<number> {
@@ -44,7 +44,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
       }
 
       if (!stream.writable || stream.closed || stream.destroyed) {
-        return reject(new Error('write after end'))
+        return reject(new Error("write after end"))
       }
 
       const writeErrorHandler = (err: Error) => {
@@ -53,11 +53,11 @@ export class PromiseWritable<TWritable extends WritableStream> {
         reject(err)
       }
 
-      stream.once('error', writeErrorHandler)
+      stream.once("error", writeErrorHandler)
 
-      const canWrite = typeof chunk === 'string' ? stream.write(chunk, encoding) : stream.write(chunk)
+      const canWrite = typeof chunk === "string" ? stream.write(chunk, encoding) : stream.write(chunk)
 
-      stream.removeListener('error', writeErrorHandler)
+      stream.removeListener("error", writeErrorHandler)
 
       if (canWrite) {
         if (!rejected) {
@@ -86,16 +86,16 @@ export class PromiseWritable<TWritable extends WritableStream> {
         }
 
         const removeListeners = () => {
-          stream.removeListener('close', closeHandler)
-          stream.removeListener('drain', drainHandler)
-          stream.removeListener('error', errorHandler)
-          stream.removeListener('finish', finishHandler)
+          stream.removeListener("close", closeHandler)
+          stream.removeListener("drain", drainHandler)
+          stream.removeListener("error", errorHandler)
+          stream.removeListener("finish", finishHandler)
         }
 
-        stream.on('close', closeHandler)
-        stream.on('drain', drainHandler)
-        stream.on('error', errorHandler)
-        stream.on('finish', finishHandler)
+        stream.on("close", closeHandler)
+        stream.on("drain", drainHandler)
+        stream.on("error", errorHandler)
+        stream.on("finish", finishHandler)
       }
     })
   }
@@ -111,7 +111,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
       }
 
       if (!stream.writable || stream.closed || stream.destroyed) {
-        return reject(new Error('writeAll after end'))
+        return reject(new Error("writeAll after end"))
       }
 
       let part = 0
@@ -122,7 +122,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
       }
 
       const drainHandler = () => {
-        if (typeof stream.cork === 'function') {
+        if (typeof stream.cork === "function") {
           stream.cork()
         }
         while (stream.writable && !this._errored && part * chunkSize < content.length) {
@@ -135,7 +135,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
             break
           }
         }
-        if (typeof stream.uncork === 'function') {
+        if (typeof stream.uncork === "function") {
           stream.uncork()
         }
       }
@@ -152,24 +152,24 @@ export class PromiseWritable<TWritable extends WritableStream> {
       }
 
       const removeListeners = () => {
-        stream.removeListener('close', closeHandler)
-        stream.removeListener('drain', drainHandler)
-        stream.removeListener('error', errorHandler)
-        stream.removeListener('finish', finishHandler)
+        stream.removeListener("close", closeHandler)
+        stream.removeListener("drain", drainHandler)
+        stream.removeListener("error", errorHandler)
+        stream.removeListener("finish", finishHandler)
       }
 
-      stream.on('drain', drainHandler)
-      stream.on('close', closeHandler)
-      stream.on('finish', finishHandler)
-      stream.on('error', errorHandler)
+      stream.on("drain", drainHandler)
+      stream.on("close", closeHandler)
+      stream.on("finish", finishHandler)
+      stream.on("error", errorHandler)
 
       drainHandler()
     })
   }
 
-  once(event: 'close' | 'error' | 'finish'): Promise<void>
-  once(event: 'open'): Promise<number>
-  once(event: 'pipe' | 'unpipe'): Promise<NodeJS.ReadableStream>
+  once(event: "close" | "error" | "finish"): Promise<void>
+  once(event: "open"): Promise<number>
+  once(event: "pipe" | "unpipe"): Promise<NodeJS.ReadableStream>
 
   once(event: string): Promise<void | number | NodeJS.ReadableStream> {
     const stream = this.stream
@@ -184,13 +184,13 @@ export class PromiseWritable<TWritable extends WritableStream> {
       if (this._errored) {
         return reject(this._errored)
       } else if (stream.closed) {
-        if (event === 'close') {
+        if (event === "close") {
           return resolve()
         } else {
           return reject(new Error(`once ${event} after close`))
         }
       } else if (stream.destroyed) {
-        if (event === 'close' || event === 'finish') {
+        if (event === "close" || event === "finish") {
           return resolve()
         } else {
           return reject(new Error(`once ${event} after destroy`))
@@ -203,7 +203,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
       }
 
       const eventHandler =
-        event !== 'close' && event !== 'finish' && event !== 'error'
+        event !== "close" && event !== "finish" && event !== "error"
           ? (argument: any) => {
               removeListeners()
               resolve(argument)
@@ -217,7 +217,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
       }
 
       const finishHandler =
-        event !== 'close'
+        event !== "close"
           ? () => {
               removeListeners()
               resolve()
@@ -228,20 +228,20 @@ export class PromiseWritable<TWritable extends WritableStream> {
         if (eventHandler) {
           stream.once(event, eventHandler)
         }
-        stream.removeListener('close', closeHandler)
-        stream.removeListener('error', errorHandler)
+        stream.removeListener("close", closeHandler)
+        stream.removeListener("error", errorHandler)
         if (finishHandler) {
-          stream.removeListener('finish', finishHandler)
+          stream.removeListener("finish", finishHandler)
         }
       }
 
       if (eventHandler) {
         stream.on(event, eventHandler)
       }
-      stream.on('close', closeHandler)
-      stream.on('error', errorHandler)
+      stream.on("close", closeHandler)
+      stream.on("error", errorHandler)
       if (finishHandler) {
-        stream.on('finish', finishHandler)
+        stream.on("finish", finishHandler)
       }
     })
   }
@@ -272,12 +272,12 @@ export class PromiseWritable<TWritable extends WritableStream> {
       }
 
       const removeListeners = () => {
-        stream.removeListener('error', errorHandler)
-        stream.removeListener('finish', finishHandler)
+        stream.removeListener("error", errorHandler)
+        stream.removeListener("finish", finishHandler)
       }
 
-      stream.on('finish', finishHandler)
-      stream.on('error', errorHandler)
+      stream.on("finish", finishHandler)
+      stream.on("error", errorHandler)
 
       stream.end()
     })
@@ -286,9 +286,9 @@ export class PromiseWritable<TWritable extends WritableStream> {
   destroy(): void {
     if (this.stream) {
       if (this.errorHandler) {
-        this.stream.removeListener('error', this.errorHandler)
+        this.stream.removeListener("error", this.errorHandler)
       }
-      if (typeof this.stream.destroy === 'function') {
+      if (typeof this.stream.destroy === "function") {
         this.stream.destroy()
       }
     }

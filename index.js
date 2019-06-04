@@ -1,1 +1,1 @@
-module.exports = require('./lib/promise-writable')
+module.exports = require("./lib/promise-writable")
