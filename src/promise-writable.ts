@@ -20,6 +20,10 @@ export class PromiseWritable<TWritable extends WritableStream> {
 
   _errored?: Error
 
+  private errorHandler = (err: Error): void => {
+    this._errored = err
+  }
+
   constructor(readonly stream: TWritable) {
     stream.on("error", this.errorHandler)
   }
@@ -280,10 +284,6 @@ export class PromiseWritable<TWritable extends WritableStream> {
         this.stream.destroy()
       }
     }
-  }
-
-  private errorHandler = (err: Error): void => {
-    this._errored = err
   }
 }
 
