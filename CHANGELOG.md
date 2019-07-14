@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.0 2019-07-14
+
+- `writeAll` should not close the stream. Fixes #2.
+
 ## v4.1.1 2019-06-04
 
 - Minor tweaks in README.

@@ -121,10 +121,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
         while (stream.writable && !this._errored && part * chunkSize < content.length) {
           const chunk = content.slice(part * chunkSize, ++part * chunkSize)
           const canWrite = stream.write(chunk)
-          if (part * chunkSize >= content.length) {
-            stream.end()
-          }
-          if (!canWrite) {
+          if (part * chunkSize >= content.length || !canWrite) {
             break
           }
         }
