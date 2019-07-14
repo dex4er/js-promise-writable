@@ -1,8 +1,8 @@
 # Changelog
 
-## 4.2.0 2019-07-14
+## 5.0.0 2019-07-14
 
-- `writeAll` should not close the stream. Fixes #2.
+- Breaking change: `writeAll` should not close the stream. Fixes #2.
 
 ## v4.1.1 2019-06-04
 
