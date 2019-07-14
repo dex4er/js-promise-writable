@@ -17,17 +17,10 @@ export class PromiseWritable<TWritable extends WritableStream> {
   }
 
   readonly _isPromiseWritable: boolean = true
+
   _errored?: Error
 
-  private readonly errorHandler: (err: Error) => void
-
   constructor(readonly stream: TWritable) {
-    this.stream = stream
-
-    this.errorHandler = (err: Error) => {
-      this._errored = err
-    }
-
     stream.on("error", this.errorHandler)
   }
 
@@ -285,13 +278,15 @@ export class PromiseWritable<TWritable extends WritableStream> {
 
   destroy(): void {
     if (this.stream) {
-      if (this.errorHandler) {
-        this.stream.removeListener("error", this.errorHandler)
-      }
+      this.stream.removeListener("error", this.errorHandler)
       if (typeof this.stream.destroy === "function") {
         this.stream.destroy()
       }
     }
+  }
+
+  private errorHandler = (err: Error): void => {
+    this._errored = err
   }
 }
 
