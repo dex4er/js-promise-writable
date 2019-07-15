@@ -122,13 +122,23 @@ export class PromiseWritable<TWritable extends WritableStream> {
         if (typeof stream.cork === "function") {
           stream.cork()
         }
+
         while (stream.writable && !this._errored && part * chunkSize < content.length) {
           const chunk = content.slice(part * chunkSize, ++part * chunkSize)
-          const canWrite = stream.write(chunk)
-          if (part * chunkSize >= content.length || !canWrite) {
+          if (part * chunkSize >= content.length) {
+            stream.write(chunk, err => {
+              if (err) reject(err)
+              else resolve(stream.bytesWritten)
+            })
             break
+          } else {
+            const canWrite = stream.write(chunk)
+            if (!canWrite) {
+              break
+            }
           }
         }
+
         if (typeof stream.uncork === "function") {
           stream.uncork()
         }

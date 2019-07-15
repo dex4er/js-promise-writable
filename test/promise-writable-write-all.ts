@@ -20,6 +20,35 @@ Feature("Test promise-writable module for writeAll method", () => {
       promiseWritable = new PromiseWritable(stream)
     })
 
+    When("I call writeAll method", done => {
+      promiseWritable.writeAll(Buffer.from("chunk1chunk2chunk3")).then(argument => {
+        bytes = argument
+        done()
+      })
+    })
+
+    Then("promise is fulfilled", () => {
+      expect(bytes).to.equal(18)
+    })
+
+    And("stream should contain this chunk", () => {
+      expect(stream.buffer).to.deep.equal(Buffer.from("chunk1chunk2chunk3"))
+    })
+  })
+
+  Scenario("Write all to stream that is finishing", () => {
+    let bytes: number
+    let promiseWritable: PromiseWritable<MockStreamWritable>
+    let stream: MockStreamWritable
+
+    Given("Writable object", () => {
+      stream = new MockStreamWritable()
+    })
+
+    And("PromiseWritable object", () => {
+      promiseWritable = new PromiseWritable(stream)
+    })
+
     When("I call writeAll method", () => {
       promiseWritable.writeAll(Buffer.from("chunk1chunk2chunk3")).then(argument => {
         bytes = argument

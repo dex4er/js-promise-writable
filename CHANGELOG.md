@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.1 2019-07-15
+
+- Fixed fatal bug in `writeAll` that caused this method could be blocked.
+
 ## 5.0.0 2019-07-14
 
 - Breaking change: `writeAll` should not close the stream. Fixes #2.

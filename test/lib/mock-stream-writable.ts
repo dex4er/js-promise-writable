@@ -16,16 +16,34 @@ export class MockStreamWritable extends Writable {
   write(chunk: any, cb?: (error: Error | null | undefined) => void): boolean
   write(chunk: any, encoding: string, cb?: (error: Error | null | undefined) => void): boolean
   write(chunk: any, _arg2?: any, _arg3?: any): boolean {
+    let cb: ((error?: Error | null) => void) | undefined
+    if (typeof _arg2 === "function") {
+      cb = _arg2
+    } else if (typeof _arg3 === "function") {
+      cb = _arg3
+    }
     if (this.closed) {
-      return this.emit("error", new Error("writeAll after end"))
+      const error = new Error("writeAll after end")
+      if (cb) {
+        cb(error)
+      }
+      this.emit("error", error)
+      return true
     }
     if (this.corked) {
       this.buffer2 = Buffer.concat([this.buffer2, chunk])
     } else {
       this.buffer = Buffer.concat([this.buffer, chunk])
-      this.bytesWritten = this.buffer.length
     }
-    return !chunk.toString().startsWith("pause")
+    this.bytesWritten = this.buffer.length + this.buffer2.length
+    if (chunk.toString().startsWith("pause")) {
+      return false
+    } else {
+      if (cb) {
+        cb()
+      }
+      return true
+    }
   }
   close(): void {
     this.closed = true
