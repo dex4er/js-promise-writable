@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.2 2019-10-07
+
+- Updated dependencies.
+
 ## 5.0.1 2019-07-15
 
 - Fixed fatal bug in `writeAll` that caused this method could be blocked.
