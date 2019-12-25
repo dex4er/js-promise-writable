@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.0.4 2019-12-25
+
+- Updated dependencies.
+
 ## v5.0.3 2019-10-07
 
 - Use `mocha-steps` for testing.
