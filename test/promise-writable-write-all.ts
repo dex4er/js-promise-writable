@@ -162,9 +162,7 @@ Feature("Test promise-writable module for writeAll method", () => {
     })
 
     Then("promise is rejected", () => {
-      expect(error)
-        .to.be.an("error")
-        .with.property("message", "writeAll after end")
+      expect(error).to.be.an("error").with.property("message", "writeAll after end")
     })
   })
 
@@ -192,9 +190,7 @@ Feature("Test promise-writable module for writeAll method", () => {
     })
 
     Then("promise is rejected", () => {
-      expect(error)
-        .to.be.an("error")
-        .with.property("message", "writeAll after end")
+      expect(error).to.be.an("error").with.property("message", "writeAll after end")
     })
   })
 
@@ -222,9 +218,7 @@ Feature("Test promise-writable module for writeAll method", () => {
     })
 
     Then("promise is rejected", () => {
-      expect(error)
-        .to.be.an("error")
-        .with.property("message", "boom")
+      expect(error).to.be.an("error").with.property("message", "boom")
     })
   })
 
@@ -252,9 +246,7 @@ Feature("Test promise-writable module for writeAll method", () => {
     })
 
     Then("promise is rejected", () => {
-      expect(error)
-        .to.be.an("error")
-        .with.property("message", "boom")
+      expect(error).to.be.an("error").with.property("message", "boom")
     })
   })
 })

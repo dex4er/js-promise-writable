@@ -129,9 +129,7 @@ Feature("Test promise-writable module for write method", () => {
     )
 
     Then("promise is rejected", () => {
-      expect(error)
-        .to.be.an("error")
-        .with.property("message", "write after end")
+      expect(error).to.be.an("error").with.property("message", "write after end")
     })
   })
 
@@ -161,9 +159,7 @@ Feature("Test promise-writable module for write method", () => {
     )
 
     Then("promise is rejected", () => {
-      expect(error)
-        .to.be.an("error")
-        .with.property("message", "write after end")
+      expect(error).to.be.an("error").with.property("message", "write after end")
     })
 
     And("PromiseWritable object can be destroyed", () => {
@@ -199,9 +195,7 @@ Feature("Test promise-writable module for write method", () => {
     })
 
     Then("promise is rejected", () => {
-      expect(error)
-        .to.be.an("error")
-        .with.property("message", "boom")
+      expect(error).to.be.an("error").with.property("message", "boom")
     })
 
     And("PromiseWritable object can be destroyed", () => {
@@ -237,9 +231,7 @@ Feature("Test promise-writable module for write method", () => {
     })
 
     Then("promise is rejected", () => {
-      expect(error)
-        .to.be.an("error")
-        .with.property("message", "boom")
+      expect(error).to.be.an("error").with.property("message", "boom")
     })
   })
 })

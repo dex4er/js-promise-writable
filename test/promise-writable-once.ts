@@ -74,9 +74,7 @@ Feature("Test promise-writable module for once method", () => {
         })
       } else {
         Then("promise is rejected", () => {
-          expect(error)
-            .to.be.an("error")
-            .with.property("message", `once ${event} after close`)
+          expect(error).to.be.an("error").with.property("message", `once ${event} after close`)
         })
       }
     })
@@ -105,9 +103,7 @@ Feature("Test promise-writable module for once method", () => {
       })
 
       Then("promise is rejected", () => {
-        expect(error)
-          .to.be.an("error")
-          .with.property("message", "boom")
+        expect(error).to.be.an("error").with.property("message", "boom")
       })
     })
   }
