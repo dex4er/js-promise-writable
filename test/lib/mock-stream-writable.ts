@@ -14,7 +14,7 @@ export class MockStreamWritable extends Writable {
   buffer2 = Buffer.alloc(0)
 
   write(chunk: any, cb?: (error: Error | null | undefined) => void): boolean
-  write(chunk: any, encoding: string, cb?: (error: Error | null | undefined) => void): boolean
+  write(chunk: any, encoding: BufferEncoding, cb?: (error: Error | null | undefined) => void): boolean
   write(chunk: any, _arg2?: any, _arg3?: any): boolean {
     let cb: ((error?: Error | null) => void) | undefined
     if (typeof _arg2 === "function") {

@@ -24,7 +24,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
     return instance._isPromiseWritable
   }
 
-  write(chunk: string | Buffer, encoding?: string): Promise<number> {
+  write(chunk: string | Buffer, encoding?: BufferEncoding): Promise<number> {
     const stream = this.stream
 
     let rejected = false
