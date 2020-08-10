@@ -3,11 +3,11 @@ import chai, {expect} from "chai"
 import dirtyChai from "dirty-chai"
 chai.use(dirtyChai)
 
+import {PromiseWritable} from "../src/promise-writable"
+
 import {And, Feature, Given, Scenario, Then, When} from "./lib/steps"
 
 import {MockStreamWritable} from "./lib/mock-stream-writable"
-
-import {PromiseWritable} from "../src/promise-writable"
 
 Feature("Test promise-writable module for once method", () => {
   for (const event of ["open", "close", "pipe", "unpipe", "finish"]) {

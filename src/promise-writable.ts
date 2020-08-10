@@ -12,20 +12,16 @@ interface WritableStream extends NodeJS.WritableStream {
 }
 
 export class PromiseWritable<TWritable extends WritableStream> {
-  static [Symbol.hasInstance](instance: PromiseWritable<WritableStream>): boolean {
-    return instance._isPromiseWritable
-  }
-
   readonly _isPromiseWritable: boolean = true
 
   _errored?: Error
 
-  private errorHandler = (err: Error): void => {
-    this._errored = err
-  }
-
   constructor(readonly stream: TWritable) {
     stream.on("error", this.errorHandler)
+  }
+
+  static [Symbol.hasInstance](instance: PromiseWritable<WritableStream>): boolean {
+    return instance._isPromiseWritable
   }
 
   write(chunk: string | Buffer, encoding?: string): Promise<number> {
@@ -294,6 +290,10 @@ export class PromiseWritable<TWritable extends WritableStream> {
         this.stream.destroy()
       }
     }
+  }
+
+  private errorHandler = (err: Error): void => {
+    this._errored = err
   }
 }
 

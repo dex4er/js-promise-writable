@@ -1,10 +1,10 @@
 import {expect} from "chai"
 
+import {PromiseWritable} from "../src/promise-writable"
+
 import {And, Feature, Given, Scenario, Then, When} from "./lib/steps"
 
 import {MockStreamWritable} from "./lib/mock-stream-writable"
-
-import {PromiseWritable} from "../src/promise-writable"
 
 Feature("Test promise-writable module for write method", () => {
   Scenario("Write chunks to stream which does not pause", () => {
@@ -116,19 +116,17 @@ Feature("Test promise-writable module for write method", () => {
       promiseWritable = new PromiseWritable(stream)
     })
 
-    When("I call write method", () => {
-      return promiseWritable.write(Buffer.from("chunk1"))
-    })
+    When("I call write method", () => promiseWritable.write(Buffer.from("chunk1")))
 
     And("stream is closed", () => {
       stream.close()
     })
 
-    And("I call write method again", () => {
-      return promiseWritable.write(Buffer.from("chunk2")).catch(err => {
+    And("I call write method again", () =>
+      promiseWritable.write(Buffer.from("chunk2")).catch(err => {
         error = err
-      })
-    })
+      }),
+    )
 
     Then("promise is rejected", () => {
       expect(error)
@@ -150,19 +148,17 @@ Feature("Test promise-writable module for write method", () => {
       promiseWritable = new PromiseWritable(stream)
     })
 
-    When("I call write method", () => {
-      return promiseWritable.write(Buffer.from("chunk1"))
-    })
+    When("I call write method", () => promiseWritable.write(Buffer.from("chunk1")))
 
     And("stream is destroyed", () => {
       stream.destroy()
     })
 
-    And("I call write method again", () => {
-      return promiseWritable.write(Buffer.from("chunk2")).catch(err => {
+    And("I call write method again", () =>
+      promiseWritable.write(Buffer.from("chunk2")).catch(err => {
         error = err
-      })
-    })
+      }),
+    )
 
     Then("promise is rejected", () => {
       expect(error)

@@ -1,13 +1,14 @@
-import {expect} from "chai"
-import semver from "semver"
 import {PassThrough} from "stream"
+import {expect} from "chai"
+
+import semver from "semver"
+
+import {PromiseWritable} from "../src/promise-writable"
 
 import {And, Feature, Given, Scenario, Then} from "./lib/steps"
 
 import {MockPromiseDuplex} from "./lib/mock-promise-duplex"
 import {MockStreamWritable} from "./lib/mock-stream-writable"
-
-import {PromiseWritable} from "../src/promise-writable"
 
 if (semver.gte(process.version, "6.11.3")) {
   Feature("Test promise-writable module with instanceof operator", () => {

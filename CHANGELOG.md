@@ -3,6 +3,7 @@
 ## v6.0.0 2020-08-09
 
 - Requires Node >= 10.
+- Converted from tslint to eslint.
 
 ## v5.0.4 2019-12-25
 
