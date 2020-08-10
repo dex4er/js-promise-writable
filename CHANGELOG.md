@@ -1,5 +1,9 @@
 # Changelog
 
+## v6.0.0 2020-08-09
+
+- Requires Node >= 10.
+
 ## v5.0.4 2019-12-25
 
 - Updated dependencies.
