@@ -129,7 +129,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
               }
               else {
                 removeListeners()
-                resolve(stream.bytesWritten)
+                resolve(stream.bytesWritten || 0)
               }
             })
             break
