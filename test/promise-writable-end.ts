@@ -1,13 +1,10 @@
-import chai, {expect} from "chai"
+import {expect} from "chai"
 
-import dirtyChai from "dirty-chai"
-chai.use(dirtyChai)
+import {PromiseWritable} from "../src/promise-writable.js"
 
-import {PromiseWritable} from "../src/promise-writable"
+import {And, Feature, Given, Scenario, Then, When} from "./lib/steps.js"
 
-import {And, Feature, Given, Scenario, Then, When} from "./lib/steps"
-
-import {MockStreamWritable} from "./lib/mock-stream-writable"
+import {MockStreamWritable} from "./lib/mock-stream-writable.js"
 
 Feature("Test promise-writable module for end method", () => {
   Scenario("End the stream", () => {
@@ -34,7 +31,7 @@ Feature("Test promise-writable module for end method", () => {
     })
 
     Then("promise is fulfilled", () => {
-      expect(ended).to.be.true()
+      expect(ended).to.be.true
     })
   })
 
@@ -66,7 +63,7 @@ Feature("Test promise-writable module for end method", () => {
     })
 
     Then("promise is fulfilled", () => {
-      expect(ended).to.be.true()
+      expect(ended).to.be.true
     })
   })
 

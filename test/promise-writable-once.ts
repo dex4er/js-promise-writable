@@ -1,13 +1,10 @@
-import chai, {expect} from "chai"
+import {expect} from "chai"
 
-import dirtyChai from "dirty-chai"
-chai.use(dirtyChai)
+import {PromiseWritable} from "../src/promise-writable.js"
 
-import {PromiseWritable} from "../src/promise-writable"
+import {And, Feature, Given, Scenario, Then, When} from "./lib/steps.js"
 
-import {And, Feature, Given, Scenario, Then, When} from "./lib/steps"
-
-import {MockStreamWritable} from "./lib/mock-stream-writable"
+import {MockStreamWritable} from "./lib/mock-stream-writable.js"
 
 Feature("Test promise-writable module for once method", () => {
   for (const event of ["open", "close", "pipe", "unpipe", "finish"]) {
@@ -35,7 +32,7 @@ Feature("Test promise-writable module for once method", () => {
       })
 
       Then("promise is fulfilled", () => {
-        expect(evented).to.be.true()
+        expect(evented).to.be.true
       })
     })
 
@@ -70,7 +67,7 @@ Feature("Test promise-writable module for once method", () => {
 
       if (event === "close") {
         Then("promise returns undefined", () => {
-          expect(evented).to.be.true()
+          expect(evented).to.be.true
         })
       } else {
         Then("promise is rejected", () => {

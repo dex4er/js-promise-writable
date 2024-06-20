@@ -1,10 +1,10 @@
 import {expect} from "chai"
 
-import {PromiseWritable} from "../src/promise-writable"
+import {PromiseWritable} from "../src/promise-writable.js"
 
-import {And, Feature, Given, Scenario, Then, When} from "./lib/steps"
+import {And, Feature, Given, Scenario, Then, When} from "./lib/steps.js"
 
-import {MockStreamWritable} from "./lib/mock-stream-writable"
+import {MockStreamWritable} from "./lib/mock-stream-writable.js"
 
 Feature('Test promise-writable module for once("error") method', () => {
   Scenario("Wait for error from stream with error", () => {

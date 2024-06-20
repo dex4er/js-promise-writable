@@ -124,7 +124,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
           if (part * chunkSize >= content.length) {
             stream.write(chunk, err => {
               if (err) reject(err)
-              else resolve(stream.bytesWritten)
+              else resolve(stream.bytesWritten || 0)
             })
             break
           } else {

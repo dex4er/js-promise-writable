@@ -48,8 +48,9 @@ export class MockStreamWritable extends Writable {
   close(): void {
     this.closed = true
   }
-  destroy(): void {
+  destroy(_error?: Error): this {
     this.destroyed = true
+    return this
   }
   cork(): void {
     this.corked = true
@@ -60,7 +61,10 @@ export class MockStreamWritable extends Writable {
     this.buffer2 = Buffer.alloc(0)
     this.bytesWritten = this.buffer.length
   }
-  end(): void {
-    // noop
+  end(cb?: () => void): this
+  end(chunk: any, cb?: () => void): this
+  end(chunk: any, encoding: BufferEncoding, cb?: () => void): this
+  end(): this {
+    return this
   }
 }
