@@ -8,6 +8,7 @@ node-option:
 package: ./package.json
 spec:
   - test/*.ts
+reporter: dot
 timeout: 90000
 throw-deprecation: true
 ui: bdd

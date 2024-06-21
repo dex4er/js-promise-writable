@@ -159,7 +159,7 @@ This method calls `destroy` method on stream and cleans up all own handlers.
 
 ## See also
 
-[`PromiseReadable`](https://www.npmjs.com/package/promise-writable),
+[`PromiseReadable`](https://www.npmjs.com/package/promise-readable),
 [`PromiseDuplex`](https://www.npmjs.com/package/promise-duplex),
 [`PromiseSocket`](https://www.npmjs.com/package/promise-socket),
 [`PromisePiping`](https://www.npmjs.com/package/promise-piping).
