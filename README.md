@@ -2,13 +2,16 @@
 
 <!-- markdownlint-disable MD013 -->
 
-[![Build Status](https://secure.travis-ci.org/dex4er/js-promise-writable.svg)](http://travis-ci.org/dex4er/js-promise-writable) [![Coverage Status](https://coveralls.io/repos/github/dex4er/js-promise-writable/badge.svg)](https://coveralls.io/github/dex4er/js-promise-writable) [![npm](https://img.shields.io/npm/v/promise-writable.svg)](https://www.npmjs.com/package/promise-writable)
+[![GitHub](https://img.shields.io/github/v/release/dex4er/js-promise-writable?display_name=tag&sort=semver)](https://github.com/dex4er/tf)
+[![CI](https://github.com/dex4er/js-promise-writable/actions/workflows/ci.yaml/badge.svg)](https://github.com/dex4er/tf/actions/workflows/ci.yaml)
+[![Trunk Check](https://github.com/dex4er/js-promise-writable/actions/workflows/trunk.yaml/badge.svg)](https://github.com/dex4er/tf/actions/workflows/trunk.yaml)
+[![Coverage Status](https://coveralls.io/repos/github/dex4er/js-promise-writable/badge.svg)](https://coveralls.io/github/dex4er/js-promise-writable)
+[![npm](https://img.shields.io/npm/v/promise-writable.svg)](https://www.npmjs.com/package/promise-writable)
 
 <!-- markdownlint-enable MD013 -->
 
-This module allows to convert
-[`Writable`](https://nodejs.org/api/stream.html#stream_class_stream_writable)
-stream into its promisified version, which returns
+This module allows conversion `Writable` stream into its promisified version,
+which returns
 [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 object fulfilled when [`open`](https://nodejs.org/api/fs.html#fs_event_open),
 [`close`](https://nodejs.org/api/fs.html#fs_event_close),
@@ -20,7 +23,7 @@ occurred.
 
 ## Requirements
 
-This module requires Node >= 6.
+This module requires Node >= 16.
 
 ## Installation
 
@@ -37,15 +40,7 @@ npm install -D @types/node
 ## Usage
 
 ```js
-const {PromiseWritable} = require("promise-writable")
-```
-
-_Typescript_:
-
-```ts
 import PromiseWritable from "promise-writable"
-// or
-import {PromiseWritable} from "promise-writable"
 ```
 
 ### constructor
@@ -59,16 +54,6 @@ const promiseWritable = new PromiseWritable(stream)
 _Example:_
 
 ```js
-const {PromiseWritable} = require("promise-writable")
-const fs = require("fs")
-
-const stream = fs.createWriteStream("/tmp/test.txt")
-const promiseWritable = new PromiseWritable(stream)
-```
-
-_Typescript:_
-
-```ts
 import PromiseWritable from "promise-writable"
 import fs from "fs"
 
@@ -96,11 +81,11 @@ console.log(promiseWritable.stream.flags)
 const written = await promiseWritable.write(chunk)
 ```
 
-This method returns `Promise` which is fulfilled when stream accepted a
+This method returns `Promise` which is fulfilled when the stream accepted a
 chunk (`write` method returned that stream is still writable or `drain` event
 occured) or stream is ended (`finish` event).
 
-Promise resolves to number of written bytes.
+Promise resolves to number that counts written bytes.
 
 _Example:_
 
@@ -114,11 +99,11 @@ const written = await promiseWritable.write(new Buffer("foo"))
 const total = await promiseWritable.writeAll(content, chunkSize)
 ```
 
-This method returns `Promise` which is fulfilled when stream accepted a
-content. This method writes the content chunk by chunk. The default chunk size
-is 64 KiB.
+This method returns `Promise` which is fulfilled when the stream accepts
+content. This method writes the content chunk by chunk. The default chunk
+size is 64 KiB.
 
-Promise resolves to number of written bytes.
+Promise resolves to a number that counts written bytes.
 
 _Example:_
 
@@ -135,7 +120,8 @@ await promiseWritable.once(event)
 This method returns `Promise` which is fulfilled when stream emits `event`. The
 result of this event is returned.
 
-Promise resolves to `undefined` value if stream is already closed or destoyed.
+Promise resolves to `undefined` value if the stream is already closed or
+destroyed.
 
 _Example:_
 
@@ -169,17 +155,17 @@ is finished. No value is returned.
 promiseWritable.destroy()
 ```
 
-This method calls destroy method on stream and cleans up all own handlers.
+This method calls `destroy` method on stream and cleans up all own handlers.
 
 ## See also
 
-[`PromiseReadable`](https://www.npmjs.com/package/promise-readable),
+[`PromiseReadable`](https://www.npmjs.com/package/promise-writable),
 [`PromiseDuplex`](https://www.npmjs.com/package/promise-duplex),
 [`PromiseSocket`](https://www.npmjs.com/package/promise-socket),
 [`PromisePiping`](https://www.npmjs.com/package/promise-piping).
 
 ## License
 
-Copyright (c) 2017-2019 Piotr Roszatycki <mailto:piotr.roszatycki@gmail.com>
+Copyright (c) 2017-2024 Piotr Roszatycki <mailto:piotr.roszatycki@gmail.com>
 
 [MIT](https://opensource.org/licenses/MIT)

@@ -1,8 +1,8 @@
-"use strict"
+#!/usr/bin/env node
 
-const fs = require("fs")
+import fs from "fs"
 
-const PromiseWritable = require("../lib/promise-writable").default
+import PromiseWritable from "../lib/promise-writable.js"
 
 async function main() {
   const wstream = new PromiseWritable(fs.createWriteStream(process.argv[2] || "a.out"))

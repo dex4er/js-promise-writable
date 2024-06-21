@@ -1,3 +1,5 @@
+#!/usr/bin/env -S node --experimental-specifier-resolution=node --no-warnings --loader ts-node/esm
+
 import fs from "fs"
 
 import PromiseWritable from "../src/promise-writable"

@@ -3,7 +3,7 @@ import {Writable} from "stream"
 export class MockStreamWritable extends Writable {
   writable = true
 
-  closed = false
+  _closed = false
   destroyed = false
 
   corked = false
@@ -12,6 +12,11 @@ export class MockStreamWritable extends Writable {
 
   buffer = Buffer.alloc(0)
   buffer2 = Buffer.alloc(0)
+
+  // @ts-expect-error in mock class
+  get closed(): boolean {
+    return this._closed
+  }
 
   write(chunk: any, cb?: (error: Error | null | undefined) => void): boolean
   write(chunk: any, encoding: BufferEncoding, cb?: (error: Error | null | undefined) => void): boolean
@@ -46,10 +51,11 @@ export class MockStreamWritable extends Writable {
     }
   }
   close(): void {
-    this.closed = true
+    this._closed = true
   }
-  destroy(): void {
+  destroy(_error?: Error): this {
     this.destroyed = true
+    return this
   }
   cork(): void {
     this.corked = true
@@ -60,7 +66,10 @@ export class MockStreamWritable extends Writable {
     this.buffer2 = Buffer.alloc(0)
     this.bytesWritten = this.buffer.length
   }
-  end(): void {
-    // noop
+  end(cb?: () => void): this
+  end(chunk: any, cb?: () => void): this
+  end(chunk: any, encoding: BufferEncoding, cb?: () => void): this
+  end(): this {
+    return this
   }
 }
