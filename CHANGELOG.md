@@ -1,5 +1,9 @@
 # Changelog
 
+## v7.0.1 2024-06-21
+
+- Correct Readme badges.
+
 ## v7.0.0 2024-06-21
 
 - Converted to ESM module.
