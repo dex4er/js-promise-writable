@@ -55,7 +55,7 @@ _Example:_
 
 ```js
 import PromiseWritable from "promise-writable"
-import fs from "fs"
+import fs from "node:fs"
 
 const stream = fs.createWriteStream("/tmp/test.txt")
 const promiseWritable = new PromiseWritable(stream)

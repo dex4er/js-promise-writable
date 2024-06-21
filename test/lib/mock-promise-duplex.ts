@@ -1,4 +1,4 @@
-import {Duplex} from "stream"
+import {Duplex} from "node:stream"
 
 import {MockPromiseReadable} from "./mock-promise-readable.js"
 
