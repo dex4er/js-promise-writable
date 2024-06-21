@@ -152,10 +152,12 @@ is finished. No value is returned.
 ### destroy
 
 ```js
-promiseWritable.destroy()
+promiseWritable = promiseWritable.destroy()
 ```
 
 This method calls `destroy` method on stream and cleans up all own handlers.
+
+The method returns this object.
 
 ## See also
 

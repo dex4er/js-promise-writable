@@ -8,7 +8,7 @@ interface WritableStream extends NodeJS.WritableStream {
   cork?(): void
   uncork?(): void
 
-  destroy?(): void
+  destroy?(error?: Error): this
 }
 
 export class PromiseWritable<TWritable extends WritableStream> {
@@ -288,13 +288,15 @@ export class PromiseWritable<TWritable extends WritableStream> {
     })
   }
 
-  destroy(): void {
+  destroy(): this {
     if (this.stream) {
       this.stream.removeListener("error", this.errorHandler)
       if (typeof this.stream.destroy === "function") {
         this.stream.destroy()
       }
     }
+
+    return this
   }
 
   private errorHandler = (err: Error): void => {
