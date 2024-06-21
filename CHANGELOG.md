@@ -1,9 +1,10 @@
 # Changelog
 
-## v7.0.0 2024-06-20
+## v7.0.0 2024-06-21
 
 - Converted to ESM module.
 - Requires Node >= 16.
+- Fixes memory leak; closes #54, #55.
 
 ## v6.0.0 2020-08-09
 

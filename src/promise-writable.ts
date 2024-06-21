@@ -126,8 +126,7 @@ export class PromiseWritable<TWritable extends WritableStream> {
               if (err) {
                 removeListeners()
                 reject(err)
-              }
-              else {
+              } else {
                 removeListeners()
                 resolve(stream.bytesWritten || 0)
               }
