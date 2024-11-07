@@ -5,8 +5,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "default": "./lib/promise-writable.js",
-      "typings": "./lib/promise-writable.d.ts"
+      "typings": "./lib/promise-writable.d.ts",
+      "default": "./lib/promise-writable.js"
     }
   },
   "main": "lib/promise-writable.js",
